@@ -1012,8 +1012,8 @@
                     <div class="stat-label">QBI Deduction</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">$25,000</div>
-                    <div class="stat-label">Max Tips Deduction</div>
+                    <div class="stat-value">$2,200</div>
+                    <div class="stat-label">Child Tax Credit</div>
                 </div>
             </div>
         </div>
@@ -1024,7 +1024,7 @@
                     <div class="card-header">
                         <h2 class="card-title">
                             <span class="card-icon">💼</span>
-                            Your Income Info
+                            Your Info
                         </h2>
                     </div>
 
@@ -1036,7 +1036,7 @@
                         </label>
                         <div class="input-wrapper">
                             <span class="input-prefix">$</span>
-                            <input type="number" id="grossIncome" class="input-field" placeholder="0" min="0" onchange="updateProgress()">
+                            <input type="number" id="grossIncome" class="input-field" placeholder="0" min="0" oninput="updateProgress()">
                             <span class="input-suffix simple-mode-only">/year</span>
                         </div>
                         <p class="input-example">Example: If you charge $50/hour and work 1000 hours, enter $50,000</p>
@@ -1050,7 +1050,7 @@
                         </label>
                         <div class="input-wrapper">
                             <span class="input-prefix">$</span>
-                            <input type="number" id="businessExpenses" class="input-field" placeholder="0" min="0" onchange="updateProgress()">
+                            <input type="number" id="businessExpenses" class="input-field" placeholder="0" min="0" oninput="updateProgress()">
                             <span class="input-suffix simple-mode-only">/year</span>
                         </div>
                         <p class="input-example">Example: $200/month for software + $100/month internet = $3,600/year</p>
@@ -1064,9 +1064,8 @@
                         </label>
                         <div class="input-wrapper">
                             <span class="input-prefix">$</span>
-                            <input type="number" id="w2Income" class="input-field" placeholder="0" min="0" onchange="updateProgress()">
+                            <input type="number" id="w2Income" class="input-field" placeholder="0" min="0" oninput="updateProgress()">
                         </div>
-                        <p class="input-example">Example: Part-time job paying $20,000/year</p>
                     </div>
 
                     <div class="input-group">
@@ -1077,9 +1076,8 @@
                         </label>
                         <div class="input-wrapper">
                             <span class="input-prefix">$</span>
-                            <input type="number" id="w2Withheld" class="input-field" placeholder="0" min="0" onchange="updateProgress()">
+                            <input type="number" id="w2Withheld" class="input-field" placeholder="0" min="0" oninput="updateProgress()">
                         </div>
-                        <p class="input-example">Example: $200/month from paychecks = $2,400/year</p>
                     </div>
 
                     <div class="input-group">
@@ -1090,51 +1088,61 @@
                         </label>
                         <div class="radio-group">
                             <div class="radio-card">
-                                <input type="radio" id="single" name="filingStatus" value="single" checked onchange="updateProgress()">
-                                <label for="single" class="radio-label">
-                                    <span class="label-title">Single</span>
-                                    <span class="label-desc simple-mode-only">Not married</span>
-                                </label>
+                                <input type="radio" id="single" name="filingStatus" value="single" checked onchange="toggleSpouseAge()">
+                                <label for="single" class="radio-label"><span class="label-title">Single</span></label>
                             </div>
                             <div class="radio-card">
-                                <input type="radio" id="married" name="filingStatus" value="married" onchange="updateProgress()">
-                                <label for="married" class="radio-label">
-                                    <span class="label-title">Married</span>
-                                    <span class="label-desc simple-mode-only">Filing together</span>
-                                </label>
+                                <input type="radio" id="married" name="filingStatus" value="married" onchange="toggleSpouseAge()">
+                                <label for="married" class="radio-label"><span class="label-title">Married</span></label>
                             </div>
                             <div class="radio-card">
-                                <input type="radio" id="head" name="filingStatus" value="head" onchange="updateProgress()">
-                                <label for="head" class="radio-label">
-                                    <span class="label-title">Head of House</span>
-                                    <span class="label-desc simple-mode-only">Single parent</span>
-                                </label>
+                                <input type="radio" id="head" name="filingStatus" value="head" onchange="toggleSpouseAge()">
+                                <label for="head" class="radio-label"><span class="label-title">Head of House</span></label>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="input-label">Number of qualifying children (under 17)?
+                            <span class="help-icon">?</span>
+                            <span class="tooltip">Enter the number of your dependents who will be under age 17 at the end of 2025. This is for the Child Tax Credit.</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <input type="number" id="numChildren" class="input-field" style="padding-left: 16px;" placeholder="0" min="0" oninput="updateProgress()">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Are you age 65 or older?
+                            <span class="help-icon">?</span>
+                            <span class="tooltip">Check the box(es) if you or your spouse (if filing jointly) will be age 65 or older by the end of 2025. This is for the new Bonus Deduction.</span>
+                        </label>
+                        <div class="radio-group" style="gap: 25px;">
+                            <label><input type="checkbox" id="isOver65"> I am 65 or older</label>
+                            <label id="spouseAgeLabel" style="display: none;"><input type="checkbox" id="spouseIsOver65"> My spouse is 65 or older</label>
                         </div>
                     </div>
 
                     <div class="obbb-section">
                         <h3 class="obbb-title">
-                            🎁 New 2025 Tax Savings (One Big Beautiful Bill)
-                            <span class="new-tag">NEW!</span>
+                            🎁 New 2025 Deductions
                         </h3>
                         
                         <div class="input-group">
                             <label class="input-label">
-                                Tips Income <span class="new-tag">Up to $25k tax-free!</span>
+                                Tips Income <span class="new-tag">Up to $25k deductible!</span>
                                 <span class="help-icon">?</span>
-                                <span class="tooltip">If you receive tips (delivery, rideshare, beauty services, etc.), up to $25,000 can be tax-free! Must be in an IRS-approved tipped occupation.</span>
+                                <span class="tooltip">If you receive tips, up to $25,000 can be deducted from your income! This applies to common tipped jobs like delivery, rideshare, etc.</span>
                             </label>
                             <div class="input-wrapper">
                                 <span class="input-prefix">$</span>
                                 <input type="number" id="tipsIncome" class="input-field" placeholder="0" min="0" max="25000">
                             </div>
-                            <p class="input-example">Example: DoorDash tips, Uber tips, hair stylist tips</p>
                         </div>
 
                         <div class="input-group">
                             <label class="input-label">
-                                Overtime Pay <span class="new-tag">Up to $12.5k tax-free!</span>
+                                Overtime Pay <span class="new-tag">Up to $12.5k deductible!</span>
                                 <span class="help-icon">?</span>
                                 <span class="tooltip">The "half" of time-and-a-half overtime pay is now deductible! Up to $12,500 for singles, $25,000 for married.</span>
                             </label>
@@ -1142,27 +1150,25 @@
                                 <span class="input-prefix">$</span>
                                 <input type="number" id="overtimePay" class="input-field" placeholder="0" min="0" max="25000">
                             </div>
-                            <p class="input-example">Example: If you earn $30/hr overtime (1.5x $20), enter $10/hr × hours worked</p>
                         </div>
 
-                        <div class="input-group">
+                        <div class="input-group" style="margin-bottom: 0;">
                             <label class="input-label">
                                 Car Loan Interest <span class="new-tag">Up to $10k deductible!</span>
                                 <span class="help-icon">?</span>
-                                <span class="tooltip">Interest on a car loan for a new U.S.-assembled vehicle is deductible up to $10,000. Must be originated after Dec 31, 2024.</span>
+                                <span class="tooltip">Interest on a loan for a new U.S.-assembled vehicle is deductible up to $10,000. Loan must be after Dec 31, 2024.</span>
                             </label>
                             <div class="input-wrapper">
                                 <span class="input-prefix">$</span>
                                 <input type="number" id="carLoanInterest" class="input-field" placeholder="0" min="0" max="10000">
                             </div>
-                            <p class="input-example">Example: $400/month interest × 12 = $4,800/year</p>
                         </div>
                     </div>
 
                     <div class="advanced-section">
                         <div class="input-group">
                             <label class="input-label">
-                                Additional Deductions
+                                Additional Deductions (Pro Mode)
                                 <span class="help-icon">?</span>
                                 <span class="tooltip">Itemized deductions, retirement contributions (IRA, 401k), health insurance premiums, etc.</span>
                             </label>
@@ -1174,9 +1180,9 @@
 
                         <div class="input-group">
                             <label class="input-label">
-                                Prior Year Tax (Safe Harbor)
+                                Prior Year Tax (for Safe Harbor)
                                 <span class="help-icon">?</span>
-                                <span class="tooltip">Enter last year's total tax to calculate safe harbor payments (pay 100% of last year to avoid penalties).</span>
+                                <span class="tooltip">Enter last year's total tax to calculate safe harbor payments (pay 100% or 110% of last year's tax to avoid penalties).</span>
                             </label>
                             <div class="input-wrapper">
                                 <span class="input-prefix">$</span>
@@ -1210,31 +1216,39 @@
                     </div>
                     
                     <div class="result-row">
-                        <span class="result-label">Your profit (income - expenses)</span>
-                        <span class="result-value" id="netIncome">$0</span>
+                        <span class="result-label">Total Income</span>
+                        <span class="result-value" id="totalIncomeDisplay">$0</span>
                     </div>
                     <div class="result-row">
-                        <span class="result-label">Self-employment tax</span>
+                        <span class="result-label">Deductions (Standard + Bonus + QBI, etc.)</span>
+                        <span class="result-value" id="totalDeductionsDisplay">$0</span>
+                    </div>
+                     <div class="result-row">
+                        <span class="result-label">Taxable Income</span>
+                        <span class="result-value" id="taxableIncomeDisplay">$0</span>
+                    </div>
+                    <div class="result-row" style="padding-top: 20px;">
+                        <span class="result-label">Self-Employment Tax</span>
                         <span class="result-value" id="selfEmploymentTax">$0</span>
                     </div>
                     <div class="result-row">
-                        <span class="result-label">Income tax</span>
-                        <span class="result-value" id="federalTax">$0</span>
+                        <span class="result-label">Income Tax (before credits)</span>
+                        <span class="result-value" id="incomeTax">$0</span>
                     </div>
                     <div class="result-row">
-                        <span class="result-label">OBBB tax savings</span>
-                        <span class="result-value success" id="obbbSavings">$0</span>
+                        <span class="result-label">Child Tax Credit</span>
+                        <span class="result-value success" id="childTaxCreditDisplay">-$0</span>
                     </div>
                     <div class="result-row">
-                        <span class="result-label">Total tax you'll owe</span>
+                        <span class="result-label">Total Estimated Tax</span>
                         <span class="result-value primary" id="totalTax">$0</span>
                     </div>
                     <div class="result-row">
-                        <span class="result-label">Tax already paid</span>
-                        <span class="result-value success" id="taxWithheld">$0</span>
+                        <span class="result-label">Tax Already Withheld</span>
+                        <span class="result-value success" id="taxWithheld">-$0</span>
                     </div>
-                    <div class="result-row">
-                        <span class="result-label">Still need to pay</span>
+                    <div class="result-row" style="border-top: 2px solid var(--primary-light); margin-top: 10px; padding-top: 15px;">
+                        <span class="result-label" style="font-weight: bold; color: var(--dark);">Estimated Tax You Still Owe</span>
                         <span class="result-value primary" id="estimatedTaxDue">$0</span>
                     </div>
                 </div>
@@ -1242,13 +1256,13 @@
                 <div class="result-card">
                     <div class="result-header">
                         <span class="card-icon">📅</span>
-                        Your Payment Schedule
+                        Your Quarterly Payment Schedule
                     </div>
                     
                     <div class="info-box warning simple-mode-only">
                         <div class="info-title">⚠️ Important: Save these dates!</div>
                         <div class="info-text">
-                            Add these to your calendar! Missing a payment = penalties. Pay online at IRS.gov or mail a check with Form 1040-ES.
+                            Add these dates to your calendar! Missing a payment can result in penalties. You can pay online at IRS.gov.
                         </div>
                     </div>
 
@@ -1257,25 +1271,25 @@
                             <div class="quarter-number">Quarter 1</div>
                             <div class="quarter-date">April 15, 2025</div>
                             <div class="quarter-amount" id="q1Amount">$0</div>
-                            <div class="quarter-status">Jan-Mar income</div>
+                            <div class="quarter-status">For Jan-Mar income</div>
                         </div>
                         <div class="quarter-card">
                             <div class="quarter-number">Quarter 2</div>
                             <div class="quarter-date">June 16, 2025</div>
                             <div class="quarter-amount" id="q2Amount">$0</div>
-                            <div class="quarter-status">Apr-May income</div>
+                            <div class="quarter-status">For Apr-May income</div>
                         </div>
                         <div class="quarter-card">
                             <div class="quarter-number">Quarter 3</div>
                             <div class="quarter-date">Sept 15, 2025</div>
                             <div class="quarter-amount" id="q3Amount">$0</div>
-                            <div class="quarter-status">Jun-Aug income</div>
+                            <div class="quarter-status">For Jun-Aug income</div>
                         </div>
                         <div class="quarter-card">
                             <div class="quarter-number">Quarter 4</div>
                             <div class="quarter-date">Jan 15, 2026</div>
                             <div class="quarter-amount" id="q4Amount">$0</div>
-                            <div class="quarter-status">Sep-Dec income</div>
+                            <div class="quarter-status">For Sep-Dec income</div>
                         </div>
                     </div>
                 </div>
@@ -1287,34 +1301,26 @@
                     </div>
                     
                     <div class="result-row">
-                        <span class="result-label">Your tax rate</span>
+                        <span class="result-label">Your Effective Tax Rate</span>
                         <span class="result-value" id="effectiveRate">0%</span>
                     </div>
                     <div class="result-row">
-                        <span class="result-label">Money left after taxes</span>
+                        <span class="result-label">Take-Home Pay (after tax)</span>
                         <span class="result-value success" id="takeHome">$0</span>
                     </div>
                     <div class="result-row">
-                        <span class="result-label">Should save per month</span>
+                        <span class="result-label">Recommended Monthly Savings</span>
                         <span class="result-value warning" id="monthlySavings">$0</span>
                     </div>
                     <div class="result-row pro-mode-only">
-                        <span class="result-label">Marginal tax bracket</span>
+                        <span class="result-label">Marginal Tax Bracket</span>
                         <span class="result-value" id="marginalRate">0%</span>
-                    </div>
-                    <div class="result-row pro-mode-only">
-                        <span class="result-label">QBI deduction</span>
-                        <span class="result-value" id="qbiDeduction">$0</span>
                     </div>
                 </div>
 
                 <div class="info-box success">
                     <div class="info-title">✅ Your Next Steps</div>
                     <div class="info-text" id="nextSteps">
-                        1. Set up a separate savings account for taxes<br>
-                        2. Save $X per month starting now<br>
-                        3. Mark payment dates in your calendar<br>
-                        4. Pay online at IRS.gov or get Form 1040-ES
                     </div>
                 </div>
             </div>
@@ -1326,23 +1332,12 @@
                 Tax Tips for Freelancers
             </div>
             <div class="tip-content" id="tipContent">
-                <strong>Tip #1:</strong> NEW for 2025! If you receive tips (delivery, rideshare, beauty services), up to $25,000 can be TAX-FREE! Make sure to track all your tips.
             </div>
             <div class="tip-navigation">
                 <button class="tip-btn" onclick="previousTip()">← Previous</button>
                 <button class="tip-btn" onclick="nextTip()">Next →</button>
             </div>
             <div class="tip-dots">
-                <span class="dot active" data-index="0"></span>
-                <span class="dot" data-index="1"></span>
-                <span class="dot" data-index="2"></span>
-                <span class="dot" data-index="3"></span>
-                <span class="dot" data-index="4"></span>
-                <span class="dot" data-index="5"></span>
-                <span class="dot" data-index="6"></span>
-                <span class="dot" data-index="7"></span>
-                <span class="dot" data-index="8"></span>
-                <span class="dot" data-index="9"></span>
             </div>
         </div>
     </div>
@@ -1354,7 +1349,7 @@
                 <h2 class="edu-title" id="eduTitle">Tax Basics</h2>
             </div>
             <div class="edu-content" id="eduContent">
-                </div>
+            </div>
         </div>
     </div>
 
@@ -1371,28 +1366,37 @@
             currentMode = mode;
             document.body.className = mode + '-mode';
             
-            // Update toggle buttons
             document.querySelectorAll('.mode-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.textContent.toLowerCase() === mode);
             });
             
-            // Update calculate button text
             document.getElementById('calculateText').textContent = 
-                mode === 'simple' ? 'Calculate My Taxes' : 'Calculate Estimated Taxes';
+                mode === 'simple' ? 'Calculate My Taxes' : 'Run Pro Calculation';
             
-            // Clear advanced fields in simple mode
             if (mode === 'simple') {
                 document.getElementById('additionalDeductions').value = '';
                 document.getElementById('priorYearTax').value = '';
             }
         }
 
-        // Progress Tracking
+        // Toggle spouse age input based on filing status
+        function toggleSpouseAge() {
+            const filingStatus = document.querySelector('input[name="filingStatus"]:checked').value;
+            const spouseLabel = document.getElementById('spouseAgeLabel');
+            if (filingStatus === 'married') {
+                spouseLabel.style.display = 'inline-block';
+            } else {
+                spouseLabel.style.display = 'none';
+                document.getElementById('spouseIsOver65').checked = false;
+            }
+            updateProgress();
+        }
+
         function updateProgress() {
             if (currentMode !== 'simple') return;
-            
-            const fields = ['grossIncome', 'businessExpenses', 'w2Income', 'w2Withheld'];
+            const fields = ['grossIncome', 'businessExpenses', 'numChildren'];
             let filled = 0;
+            let totalFields = fields.length + 1; // +1 for filing status
             
             fields.forEach(id => {
                 if (document.getElementById(id).value) filled++;
@@ -1400,27 +1404,40 @@
             
             if (document.querySelector('input[name="filingStatus"]:checked')) filled++;
             
-            const progress = Math.round((filled / 5) * 100);
+            const progress = Math.round((filled / totalFields) * 100);
             document.getElementById('progressBar').style.width = progress + '%';
             document.getElementById('progressText').textContent = progress + '%';
         }
 
-        // Tips Management - UPDATED with new 2025 info
         const tips = [
-            "<strong>Tip #1:</strong> NEW for 2025! If you receive tips (delivery, rideshare, beauty services), up to $25,000 can be TAX-FREE! Make sure to track all your tips.",
-            "<strong>Tip #2:</strong> For 2025, you'll receive a Form 1099-K if your business transactions from a third-party payment network are more than $2,500. Remember to report ALL income, even if you don't get a form!",
-            "<strong>Tip #3:</strong> Set aside 25-30% of your income for taxes. It's better to save too much than too little!",
-            "<strong>Tip #4:</strong> NEW: Car loan interest is deductible up to $10,000! Must be a new U.S.-assembled vehicle with a loan after Dec 31, 2024.",
+            "<strong>Tip #1:</strong> The 2025 Child Tax Credit is $2,200 per child, but it phases out for higher incomes. Make sure you enter your number of children for an accurate calculation!",
+            "<strong>Tip #2:</strong> For 2025, the 1099-K reporting threshold is over $20,000 AND more than 200 transactions. But remember, you must report ALL income, even if you don't get a form!",
+            "<strong>Tip #3:</strong> Set aside 25-30% of every payment you receive for taxes. It's much easier than trying to find a large sum when the due date hits.",
+            "<strong>Tip #4:</strong> Are you 65 or older? A new 'bonus deduction' for 2025 can significantly increase your standard deduction and lower your taxes.",
             "<strong>Tip #5:</strong> Home office deduction: If you use part of your home exclusively for work, you can deduct a portion of your rent/mortgage and utilities.",
             "<strong>Tip #6:</strong> Mileage adds up! Track every business trip—the 2025 rate is 70 cents per mile.",
-            "<strong>Tip #7:</strong> The QBI deduction is now PERMANENT! You can deduct 20% of your qualified business income.",
+            "<strong>Tip #7:</strong> The 20% Qualified Business Income (QBI) deduction is permanent. This is one of the most valuable deductions for freelancers.",
             "<strong>Tip #8:</strong> Keep digital copies of all receipts. Good recordkeeping is your best defense in an audit and ensures you get every deduction.",
-            "<strong>Tip #9:</strong> Retirement savings reduce your taxes! A SEP-IRA lets you save up to 25% of your income.",
+            "<strong>Tip #9:</strong> Retirement savings reduce your taxes! Contributions to a SEP-IRA or Solo 401(k) are deductible.",
             "<strong>Tip #10:</strong> Don't forget digital assets! Income from things like cryptocurrencies is taxable and must be reported on your return."
         ];
 
         let currentTip = 0;
 
+        function updateTipDisplay() {
+            document.getElementById('tipContent').innerHTML = tips[currentTip];
+            const dotsContainer = document.querySelector('.tip-dots');
+            dotsContainer.innerHTML = '';
+            tips.forEach((_, index) => {
+                const dot = document.createElement('span');
+                dot.className = 'dot';
+                if (index === currentTip) {
+                    dot.classList.add('active');
+                }
+                dotsContainer.appendChild(dot);
+            });
+        }
+        
         function nextTip() {
             currentTip = (currentTip + 1) % tips.length;
             updateTipDisplay();
@@ -1431,72 +1448,18 @@
             updateTipDisplay();
         }
 
-        function updateTipDisplay() {
-            document.getElementById('tipContent').innerHTML = tips[currentTip];
-            document.querySelectorAll('.dot').forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentTip);
-            });
-        }
-
-        // Educational Content - Updated with OBBB
         const educationContent = {
             basics: {
                 title: "What Are Quarterly Taxes?",
-                content: `
-                    <h3>The Basics</h3>
-                    <p>When you're self-employed, you're basically running a tiny business - even if it's just you! Unlike regular employees who have taxes taken out of each paycheck, you need to pay taxes yourself four times a year.</p>
-                    
-                    <h3>Why Quarterly?</h3>
-                    <p>The IRS wants their money throughout the year, not all at once in April. Think of it like a subscription service for being self-employed!</p>
-                    
-                    <h3>What You're Paying</h3>
-                    <p><strong>Self-Employment Tax (15.3%):</strong> This covers Social Security and Medicare - stuff that employers usually pay half of.</p>
-                    <p><strong>Income Tax:</strong> Based on how much you make, using tax brackets from 10% to 37%.</p>
-                    
-                    <h3>The Magic Number: $1,000</h3>
-                    <p>If you'll owe more than $1,000 in taxes for the year, you need to pay quarterly. Otherwise, you might face penalties!</p>
-                `
+                content: `<h3>The Basics</h3><p>When you're self-employed, you're your own boss and your own payroll department. The IRS requires you to pay income and self-employment taxes throughout the year in four installments, known as quarterly estimated taxes.</p><h3>Why?</h3><p>The U.S. has a pay-as-you-go tax system. If you were a W-2 employee, your employer would withhold these taxes for you. As a freelancer, you're responsible for doing it yourself.</p><h3>Who Has to Pay?</h3><p>Generally, you must pay estimated taxes if you expect to owe at least $1,000 in tax for the year after subtracting any withholding.</p>`
             },
             expenses: {
                 title: "What Can I Deduct?",
-                content: `
-                    <h3>Common Business Expenses</h3>
-                    <p><strong>✓ Home Office:</strong> Internet, portion of rent/utilities if you have a dedicated workspace</p>
-                    <p><strong>✓ Equipment:</strong> Computer, phone, software subscriptions, tools</p>
-                    <p><strong>✓ Travel:</strong> Mileage to client meetings, parking, tolls, business trips</p>
-                    <p><strong>✓ Professional:</strong> Training courses, conferences, professional memberships</p>
-                    <p><strong>✓ Marketing:</strong> Website, business cards, ads, portfolio hosting</p>
-                    
-                    <h3>The Golden Rule</h3>
-                    <p>If it's "ordinary and necessary" for your business, it's probably deductible. When in doubt, keep the receipt and ask a tax pro!</p>
-                    
-                    <h3>What's NOT Deductible</h3>
-                    <p><strong>✗</strong> Personal expenses (your morning coffee, unless meeting a client)</p>
-                    <p><strong>✗</strong> Commuting to a regular workplace</p>
-                    <p><strong>✗</strong> Personal clothes (unless they're uniforms)</p>
-                `
+                content: `<h3>The Golden Rule</h3><p>If a purchase is "ordinary and necessary" for your business, it's likely deductible. This means it's a common expense in your industry and helpful for your work.</p><h3>Common Deductions</h3><p><strong>✓ Home Office:</strong> A portion of your rent/mortgage and utilities if you have a dedicated workspace.</p><p><strong>✓ Software & Subscriptions:</strong> Adobe Creative Suite, project management tools, etc.</p><p><strong>✓ Business Mileage:</strong> The portion of your car expenses used for business travel.</p><p><strong>✓ Supplies:</strong> Anything from office paper to materials needed for your craft.</p><p><strong>✓ Professional Development:</strong> Courses, workshops, and industry conferences.</p>`
             },
             obbb: {
-                title: "New 2025 Tax Savings (One Big Beautiful Bill)",
-                content: `
-                    <h3>🎁 No Tax on Tips!</h3>
-                    <p>Up to <strong>$25,000</strong> in tips can be tax-free if you're in an IRS-approved tipped occupation (delivery, rideshare, beauty, food service, etc.). This alone could save you $3,000-$7,000 in taxes!</p>
-                    
-                    <h3>⏰ No Tax on Overtime!</h3>
-                    <p>The "half" of time-and-a-half overtime is now deductible. Up to <strong>$12,500</strong> for singles, $25,000 for married couples. If you work overtime, this is huge!</p>
-                    
-                    <h3>🚗 Car Loan Interest Deduction!</h3>
-                    <p>Up to <strong>$10,000</strong> in car loan interest is deductible if you bought a new U.S.-assembled vehicle after Dec 31, 2024. Perfect for rideshare drivers!</p>
-                    
-                    <h3>📈 Higher Standard Deduction!</h3>
-                    <p>The standard deduction for 2025 is <strong>$15,000</strong> (single) or <strong>$30,000</strong> (married). That's income you don't pay taxes on!</p>
-                    
-                    <h3>💼 QBI Deduction Made Permanent!</h3>
-                    <p>The 20% deduction on qualified business income is now permanent. This means 20% of your profit might be tax-free!</p>
-                    
-                    <h3>📱 1099-K Threshold Raised!</h3>
-                    <p>You'll only get a 1099-K if you have over $2,500 in transactions on a platform. BUT you still need to report all income!</p>
-                `
+                title: "New 2025 Tax Savings",
+                content: `<h3>Bonus Deduction (65+)</h3><p>A new deduction for those 65 and older can add <strong>$6,000</strong> (single) or <strong>$12,000</strong> (married) to your standard deduction, if your income is below the phaseout levels.</p><h3>Child Tax Credit Boost</h3><p>The credit is increased to <strong>$2,200</strong> per qualifying child under 17.</p><h3>Other Big Deductions</h3><p>Don't forget the new deductions for <strong>Tip Income</strong> (up to $25k), the "half" of <strong>Overtime Pay</strong> (up to $12.5k), and <strong>Car Loan Interest</strong> (up to $10k) on new, U.S.-assembled vehicles.</p>`
             }
         };
 
@@ -1511,7 +1474,6 @@
             document.getElementById('eduOverlay').style.display = 'none';
         }
 
-        // Format Currency
         function formatCurrency(amount) {
             return new Intl.NumberFormat('en-US', {
                 style: 'currency',
@@ -1521,227 +1483,160 @@
             }).format(amount);
         }
 
-        // Tax Calculation - UPDATED with new 2025 info
         function calculateTaxes() {
-            // Get input values
+            // 1. Get All Input Values
             const grossIncome = parseFloat(document.getElementById('grossIncome').value) || 0;
             const businessExpenses = parseFloat(document.getElementById('businessExpenses').value) || 0;
             const w2Income = parseFloat(document.getElementById('w2Income').value) || 0;
             const w2Withheld = parseFloat(document.getElementById('w2Withheld').value) || 0;
+            const filingStatus = document.querySelector('input[name="filingStatus"]:checked').value;
+            const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
+            const isOver65 = document.getElementById('isOver65').checked;
+            const spouseIsOver65 = document.getElementById('spouseIsOver65').checked;
+            
+            const tipsIncome = parseFloat(document.getElementById('tipsIncome').value) || 0;
+            const overtimePay = parseFloat(document.getElementById('overtimePay').value) || 0;
+            const carLoanInterest = parseFloat(document.getElementById('carLoanInterest').value) || 0;
+            
             const additionalDeductions = parseFloat(document.getElementById('additionalDeductions').value) || 0;
             const priorYearTax = parseFloat(document.getElementById('priorYearTax').value) || 0;
-            const filingStatus = document.querySelector('input[name="filingStatus"]:checked').value;
 
-            // OBBB Deductions
-            let tipsIncome = parseFloat(document.getElementById('tipsIncome').value) || 0;
-            let overtimePay = parseFloat(document.getElementById('overtimePay').value) || 0;
-            let carLoanInterest = parseFloat(document.getElementById('carLoanInterest').value) || 0;
-
-            // Validate minimum input
-            if (grossIncome === 0 && w2Income === 0) {
-                alert(currentMode === 'simple' ? 
-                    "Please enter your income first! 😊" : 
-                    "Please enter income information.");
-                return;
-            }
-
-            // Calculate net business income
+            // 2. Calculate Initial Income Figures
             const netBusinessIncome = Math.max(0, grossIncome - businessExpenses);
-
-            // Apply OBBB deduction limits and phase-outs
             const totalIncome = netBusinessIncome + w2Income;
-            
-            // Tips deduction (max $25,000, phases out at $150k/$300k)
-            tipsIncome = Math.min(tipsIncome, 25000);
-            if (filingStatus === 'married' && totalIncome > 300000) {
-                tipsIncome = 0;
-            } else if (totalIncome > 150000) {
-                tipsIncome = 0;
-            }
-
-            // Overtime deduction (max $12,500/$25,000)
-            const overtimeLimit = filingStatus === 'married' ? 25000 : 12500;
-            overtimePay = Math.min(overtimePay, overtimeLimit);
-            if (filingStatus === 'married' && totalIncome > 300000) {
-                overtimePay = 0;
-            } else if (totalIncome > 150000) {
-                overtimePay = 0;
-            }
-
-            // Car loan interest (max $10,000, phases out at $100k/$200k)
-            carLoanInterest = Math.min(carLoanInterest, 10000);
-            if (filingStatus === 'married' && totalIncome > 200000) {
-                carLoanInterest = 0;
-            } else if (totalIncome > 100000) {
-                carLoanInterest = 0;
-            }
-
-            const totalOBBBDeductions = tipsIncome + overtimePay + carLoanInterest;
-
-            // Calculate self-employment tax
             const selfEmploymentIncome = netBusinessIncome * 0.9235;
+
+            // 3. Calculate Self-Employment Tax
             const socialSecurityWageBase = 176100;
-            
             let selfEmploymentTax = 0;
             if (selfEmploymentIncome > 0) {
                 const socialSecurityTax = Math.min(selfEmploymentIncome, socialSecurityWageBase) * 0.124;
                 const medicareTax = selfEmploymentIncome * 0.029;
                 selfEmploymentTax = socialSecurityTax + medicareTax;
             }
-
-            // Deductible portion of self-employment tax
             const deductibleSETax = selfEmploymentTax * 0.5;
 
-            // Calculate AGI
+            // 4. Calculate Adjusted Gross Income (AGI)
             const agi = totalIncome - deductibleSETax;
 
-            // UPDATED standard deductions for 2025
-            const standardDeductions = {
-                single: 15000,
-                married: 30000,
-                head: 22500
-            };
+            // 5. Calculate Deductions
+            const baseStandardDeductions = { single: 15750, married: 31500, head: 23625 };
+            let standardDeduction = baseStandardDeductions[filingStatus];
 
-            const standardDeduction = standardDeductions[filingStatus];
+            // Bonus Deduction for 65+
+            let bonusDeduction = 0;
+            if (isOver65) {
+                const phaseoutStart = (filingStatus === 'married') ? 150000 : 75000;
+                const phaseoutEnd = (filingStatus === 'married') ? 250000 : 175000;
+                let maxBonus = (filingStatus === 'married') ? (isOver65 && spouseIsOver65 ? 12000 : 6000) : 6000;
+                
+                if (agi <= phaseoutStart) {
+                    bonusDeduction = maxBonus;
+                } else if (agi < phaseoutEnd) {
+                    const excessIncome = agi - phaseoutStart;
+                    const reduction = excessIncome * 0.06;
+                    bonusDeduction = Math.max(0, maxBonus - reduction);
+                }
+            }
+            standardDeduction += bonusDeduction;
+
+            // OBBB Deductions (Tips, OT, Car Interest)
+            const totalOBBBDeductions = tipsIncome + overtimePay + carLoanInterest;
             
-            // QBI deduction
-            const tentativeQBI = netBusinessIncome * 0.20;
-            const qbiDeduction = Math.min(tentativeQBI, Math.max(0, (agi - standardDeduction - additionalDeductions - totalOBBBDeductions) * 0.20));
+            // QBI Deduction
+            let preQBIDeductibleAmount = standardDeduction + totalOBBBDeductions + additionalDeductions;
+            const qbiDeduction = Math.min(netBusinessIncome * 0.20, Math.max(0, (agi - preQBIDeductibleAmount) * 0.20));
 
-            // Taxable income
-            const taxableIncome = Math.max(0, agi - standardDeduction - additionalDeductions - qbiDeduction - totalOBBBDeductions);
+            const totalDeductions = preQBIDeductibleAmount + qbiDeduction;
+            const taxableIncome = Math.max(0, agi - totalDeductions);
 
-            // UPDATED 2025 Tax brackets
+            // 6. Calculate Income Tax
             const taxBrackets = {
-                single: [
-                    { min: 0, max: 11925, rate: 0.10 },
-                    { min: 11925, max: 48475, rate: 0.12 },
-                    { min: 48475, max: 103350, rate: 0.22 },
-                    { min: 103350, max: 197300, rate: 0.24 },
-                    { min: 197300, max: 250525, rate: 0.32 },
-                    { min: 250525, max: 375800, rate: 0.35 },
-                    { min: 375800, max: Infinity, rate: 0.37 }
-                ],
-                married: [
-                    { min: 0, max: 23850, rate: 0.10 },
-                    { min: 23850, max: 96950, rate: 0.12 },
-                    { min: 96950, max: 206700, rate: 0.22 },
-                    { min: 206700, max: 394600, rate: 0.24 },
-                    { min: 394600, max: 501050, rate: 0.32 },
-                    { min: 501050, max: 751600, rate: 0.35 },
-                    { min: 751600, max: Infinity, rate: 0.37 }
-                ],
-                head: [
-                    { min: 0, max: 17000, rate: 0.10 },
-                    { min: 17000, max: 64850, rate: 0.12 },
-                    { min: 64850, max: 103350, rate: 0.22 },
-                    { min: 103350, max: 197300, rate: 0.24 },
-                    { min: 197300, max: 250500, rate: 0.32 },
-                    { min: 250500, max: 626350, rate: 0.35 },
-                    { min: 626350, max: Infinity, rate: 0.37 }
-                ]
+                single: [{ min: 0, max: 11925, rate: 0.10 },{ min: 11925, max: 48475, rate: 0.12 },{ min: 48475, max: 103350, rate: 0.22 },{ min: 103350, max: 197300, rate: 0.24 },{ min: 197300, max: 250525, rate: 0.32 },{ min: 250525, max: 626350, rate: 0.35 },{ min: 626350, max: Infinity, rate: 0.37 }],
+                married: [{ min: 0, max: 23850, rate: 0.10 },{ min: 23850, max: 96950, rate: 0.12 },{ min: 96950, max: 206700, rate: 0.22 },{ min: 206700, max: 394600, rate: 0.24 },{ min: 394600, max: 501050, rate: 0.32 },{ min: 501050, max: 751600, rate: 0.35 },{ min: 751600, max: Infinity, rate: 0.37 }],
+                head: [{ min: 0, max: 17000, rate: 0.10 },{ min: 17000, max: 64850, rate: 0.12 },{ min: 64850, max: 103350, rate: 0.22 },{ min: 103350, max: 197300, rate: 0.24 },{ min: 197300, max: 250500, rate: 0.32 },{ min: 250500, max: 626350, rate: 0.35 },{ min: 626350, max: Infinity, rate: 0.37 }]
             };
-
-            // Calculate federal income tax
-            let federalTax = 0;
+            
+            let incomeTax = 0;
             let marginalRate = 0;
             const brackets = taxBrackets[filingStatus];
-            
             for (const bracket of brackets) {
                 if (taxableIncome > bracket.min) {
-                    const taxableInBracket = Math.min(taxableIncome - bracket.min, bracket.max - bracket.min);
-                    federalTax += taxableInBracket * bracket.rate;
+                    const taxableInBracket = Math.min(taxableIncome, bracket.max) - bracket.min;
+                    incomeTax += taxableInBracket * bracket.rate;
                     marginalRate = bracket.rate * 100;
-                    if (taxableIncome <= bracket.max) {
-                        break;
-                    }
+                } else {
+                    break;
                 }
             }
 
-            // Additional Medicare tax
-            const medicareThresholds = {
-                single: 200000,
-                married: 250000,
-                head: 200000
-            };
-            const medicareThreshold = medicareThresholds[filingStatus];
-            const additionalMedicareTax = Math.max(0, (agi - medicareThreshold) * 0.009);
+            // 7. Apply Credits and Finalize Tax
+            // Child Tax Credit
+            let childTaxCredit = 0;
+            const ctcPhaseoutStart = (filingStatus === 'married') ? 400000 : 200000;
+            if (agi < ctcPhaseoutStart) {
+                childTaxCredit = numChildren * 2200;
+            } else {
+                const excessAgi = Math.ceil((agi - ctcPhaseoutStart) / 1000) * 1000;
+                const reduction = (excessAgi / 1000) * 50;
+                childTaxCredit = Math.max(0, (numChildren * 2200) - reduction);
+            }
 
-            // Total taxes
-            const totalTax = selfEmploymentTax + federalTax + additionalMedicareTax;
+            const totalTax = Math.max(0, selfEmploymentTax + incomeTax - childTaxCredit);
             let estimatedTaxDue = Math.max(0, totalTax - w2Withheld);
-
-            // Safe harbor calculation (Pro mode)
+            
+            // Safe Harbor (Pro Mode)
             if (currentMode === 'pro' && priorYearTax > 0) {
-                // Uses 110% rule for AGI > $150k
                 const safeHarborAmount = agi > 150000 ? priorYearTax * 1.1 : priorYearTax;
                 if (safeHarborAmount < totalTax) {
                     estimatedTaxDue = Math.max(0, safeHarborAmount - w2Withheld);
                 }
             }
-            
-            // Quarterly payments
+
+            // 8. Final Calculations for Display
             const quarterlyPayment = estimatedTaxDue / 4;
-            const monthlySavings = estimatedTaxDue / 12;
-
-            // Effective tax rate
+            const monthlySavings = estimatedTaxDue > 0 ? estimatedTaxDue / 12 : 0;
             const effectiveRate = totalIncome > 0 ? (totalTax / totalIncome) * 100 : 0;
-
-            // Take-home income
             const takeHome = totalIncome - totalTax;
 
-            // Calculate OBBB savings
-            const obbbSavings = totalOBBBDeductions * (marginalRate / 100);
-
-            // Update UI
-            document.getElementById('netIncome').textContent = formatCurrency(netBusinessIncome);
+            // 9. Update UI
+            document.getElementById('totalIncomeDisplay').textContent = formatCurrency(totalIncome);
+            document.getElementById('totalDeductionsDisplay').textContent = formatCurrency(totalDeductions);
+            document.getElementById('taxableIncomeDisplay').textContent = formatCurrency(taxableIncome);
             document.getElementById('selfEmploymentTax').textContent = formatCurrency(selfEmploymentTax);
-            document.getElementById('federalTax').textContent = formatCurrency(federalTax);
-            document.getElementById('obbbSavings').textContent = formatCurrency(obbbSavings);
+            document.getElementById('incomeTax').textContent = formatCurrency(incomeTax);
+            document.getElementById('childTaxCreditDisplay').textContent = `-${formatCurrency(childTaxCredit)}`;
             document.getElementById('totalTax').textContent = formatCurrency(totalTax);
-            document.getElementById('taxWithheld').textContent = formatCurrency(w2Withheld);
+            document.getElementById('taxWithheld').textContent = `-${formatCurrency(w2Withheld)}`;
             document.getElementById('estimatedTaxDue').textContent = formatCurrency(estimatedTaxDue);
             
-            // Quarterly amounts
             document.getElementById('q1Amount').textContent = formatCurrency(quarterlyPayment);
             document.getElementById('q2Amount').textContent = formatCurrency(quarterlyPayment);
             document.getElementById('q3Amount').textContent = formatCurrency(quarterlyPayment);
             document.getElementById('q4Amount').textContent = formatCurrency(quarterlyPayment);
             
-            // Additional info
             document.getElementById('effectiveRate').textContent = effectiveRate.toFixed(1) + '%';
             document.getElementById('marginalRate').textContent = marginalRate.toFixed(0) + '%';
-            document.getElementById('qbiDeduction').textContent = formatCurrency(qbiDeduction);
             document.getElementById('takeHome').textContent = formatCurrency(takeHome);
             document.getElementById('monthlySavings').textContent = formatCurrency(monthlySavings);
 
-            // Update next steps
-            const stepsText = currentMode === 'simple' ? 
-                `1. Set up a separate savings account just for taxes<br>
-                2. Save ${formatCurrency(monthlySavings)} every month starting now<br>
-                3. Add these payment dates to your calendar with reminders<br>
-                4. Pay online at IRS.gov (easiest!) or mail Form 1040-ES<br>
-                5. Track your tips and overtime - they're tax-free up to limits!` :
-                `1. Set aside ${formatCurrency(monthlySavings)}/month for estimated taxes<br>
-                2. Make quarterly payments via EFTPS or IRS Direct Pay<br>
-                3. Consider safe harbor payment of ${priorYearTax > 0 ? formatCurrency(priorYearTax * (agi > 150000 ? 1.1 : 1)) : 'prior year tax'}<br>
-                4. Track OBBB deductions: tips ($25k), overtime ($12.5k), car interest ($10k)<br>
-                5. Monitor income for phase-out thresholds`;
-            
+            const safeHarborDisplay = priorYearTax > 0 ? formatCurrency(priorYearTax * (agi > 150000 ? 1.1 : 1)) : 'your prior year\'s tax';
+            const stepsText = `1. Set up a separate high-yield savings account just for taxes.<br>
+                             2. Automatically save <strong>${formatCurrency(monthlySavings)}</strong> every month.<br>
+                             3. Add the four quarterly due dates to your calendar with alerts.<br>
+                             4. Pay easily online at IRS.gov/payments before each deadline.<br>
+                             ${currentMode === 'pro' ? `5. To avoid penalties, ensure your payments meet the Safe Harbor rule (paying at least <strong>${safeHarborDisplay}</strong>).` : ''}`;
             document.getElementById('nextSteps').innerHTML = stepsText;
 
-            // Show results
             document.getElementById('resultsSection').classList.add('show');
-            
-            // Scroll to results
             document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // Initialize
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             setMode('simple');
+            updateTipDisplay(); // To show the first tip and dots
             
-            // Add enter key support
             document.querySelectorAll('.input-field').forEach(input => {
                 input.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
@@ -1750,7 +1645,6 @@
                 });
             });
 
-            // Close education overlay on outside click
             document.getElementById('eduOverlay').addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeEducation();
