@@ -1,1 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaxBuddy - Simple Quarterly Tax Calculator for Freelancers</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary: #14b8a6;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --white: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --hover-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Mode Toggle */
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 50px;
+            padding: 4px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            z-index: 100;
+        }
+
+        .mode-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            color: var(--gray);
+            cursor: pointer;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 60px 20px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: -30px auto 40px;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        /* Welcome Card (Simple Mode) */
+        .welcome-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            display: none;
+        }
+
+        .simple-mode .welcome-card {
+            display: block;
+        }
+
+        .welcome-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .welcome-text {
+            color: var(--gray);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            background: var(--light-gray);
+            height: 8px;
+            border-radius: 50px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            background: var(--primary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 50px;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 968px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Input Groups */
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .help-icon {
+            width: 18px;
+            height: 18px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            cursor: help;
+            font-weight: bold;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: var(--dark);
+            color: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            max-width: 250px;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100%);
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--dark);
+        }
+
+        .help-icon:hover + .tooltip {
+            opacity: 1;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            padding-left: 36px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .input-prefix {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 0.9rem;
+            pointer-events: none;
+        }
+
+        .input-example {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        /* Simple Mode Specific */
+        .simple-mode .input-example {
+            display: block;
+        }
+
+        .pro-mode .input-example {
+            display: none;
+        }
+
+        .simple-mode .advanced-section {
+            display: none;
+        }
+
+        /* Radio Groups */
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .radio-card {
+            flex: 1;
+            min-width: 120px;
+            position: relative;
+        }
+
+        .radio-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-label {
+            display: block;
+            padding: 12px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .radio-label:hover {
+            border-color: var(--primary-light);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .radio-card input[type="radio"]:checked + .radio-label {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .radio-label .label-title {
+            display: block;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .radio-label .label-desc {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--gray);
+            font-weight: normal;
+        }
+
+        /* Calculate Button */
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--bg-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculate-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .calculate-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            border: 2px solid var(--light-gray);
+        }
+
+        .result-card.highlight {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        .result-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .result-value.primary {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .result-value.success {
+            color: var(--success);
+        }
+
+        .result-value.warning {
+            color: var(--warning);
+        }
+
+        /* Quarterly Payments Grid */
+        .quarters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .quarter-card {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quarter-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+        }
+
+        .quarter-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .quarter-number {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .quarter-date {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .quarter-amount {
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .quarter-status {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid var(--secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .info-box.warning {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-left-color: var(--warning);
+        }
+
+        .info-box.success {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border-left-color: var(--success);
+        }
+
+        .info-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-text {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Tips Carousel */
+        .tips-carousel {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .tip-content {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            min-height: 60px;
+        }
+
+        .tip-navigation {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tip-btn {
+            padding: 8px 16px;
+            background: var(--light-gray);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+
+        .tip-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Educational Overlay */
+        .edu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .edu-modal {
+            background: white;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .edu-header {
+            padding: 25px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .edu-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .edu-content {
+            padding: 25px;
+            line-height: 1.6;
+        }
+
+        .edu-content h3 {
+            color: var(--dark);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .edu-content p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .edu-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: var(--light-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .edu-close:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .mode-toggle {
+                top: 10px;
+                right: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .quarters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+
+            .radio-card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mode Toggle -->
+    <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setMode('simple')">Simple</button>
+        <button class="mode-btn" onclick="setMode('pro')">Pro</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1>🎯 TaxBuddy</h1>
+        <p class="subtitle">Your Friendly Quarterly Tax Calculator</p>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Welcome Card (Simple Mode Only) -->
+        <div class="welcome-card">
+            <h2 class="welcome-title">👋 Welcome! Let's Make Taxes Easy</h2>
+            <p class="welcome-text">
+                Don't worry if taxes feel confusing - we'll walk through this together! Just fill in what you know, and we'll calculate everything for you. Hover over any <span class="help-icon">?</span> for help.
+            </p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <p class="progress-text">Progress: <span id="progressText">0%</span> complete</p>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">
+                            <span class="card-icon">💼</span>
+                            Your Income Info
+                        </h2>
+                    </div>
+
+                    <!-- Business Income -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            How much money will you make this year?
+                            <span class="help-icon">?</span>
+                            <span class="tooltip">This is your total income from freelancing, gig work, or 1099 contracts before any expenses. Include all money clients will pay you.</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="number" id="grossIncome" class="input-field" placeholder="0" min="0" onchange="updateProgress()">
+                            <span class="input-suffix simple-mode-only">/year</span>
+                        </div>
+                        <p class="input-example">Example: If you charge $50/hour and work 1000 hours, enter $50,000</p>
+                    </div>
+
+                    <!-- Business Expenses -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            What will you spend on business stuff?
+                            <span class="help-icon">?</span>
+                            <span class="tooltip">Include computer, software, internet, phone, travel, supplies, home office, and any other business costs. Keep receipts!</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="number" id="businessExpenses" class="input-field" placeholder="0" min="0" onchange="updateProgress()">
+                            <span class="input-suffix simple-mode-only">/year</span>
+                        </div>
+                        <p class="input-example">Example: $200/month for software + $100/month internet = $3,600/year</p>
+                    </div>
+
+                    <!-- W-2 Income -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            Do you also have a regular job? (W-2 income)
+                            <span class="help-icon">?</span>
+                            <span class="tooltip">If you work for an employer who gives you a W-2, enter that salary here. Leave at 0 if you're only freelancing.</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="number" id="w2Income" class="input-field" placeholder="0" min="0" onchange="updateProgress()">
+                        </div>
+                        <p class="input-example">Example: Part-time job paying $20,000/year</p>
+                    </div>
+
+                    <!-- Tax Withheld -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            Tax already taken from paychecks
+                            <span class="help-icon">?</span>
+                            <span class="tooltip">Check your pay stubs for "Federal Tax Withheld" and add them up for the year. Skip if no regular job.</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-prefix">$</span>
+                            <input type="number" id="w2Withheld" class="input-field" placeholder="0" min="0" onchange="updateProgress()">
+                        </div>
+                        <p class="input-example">Example: $200/month from paychecks = $2,400/year</p>
+                    </div>
+
+                    <!-- Filing Status -->
+                    <div class="input-group">
+                        <label class="input-label">
+                            How will you file your taxes?
+                            <span class="help-icon">?</span>
+                            <span class="tooltip">Single = not married. Married = filing taxes together with spouse. Head of Household = single with dependents.</span>
+                        </label>
+                        <div class="radio-group">
+                            <div class="radio-card">
+                                <input type="radio" id="single" name="filingStatus" value="single" checked onchange="updateProgress()">
+                                <label for="single" class="radio-label">
+                                    <span class="label-title">Single</span>
+                                    <span class="label-desc simple-mode-only">Not married</span>
+                                </label>
+                            </div>
+                            <div class="radio-card">
+                                <input type="radio" id="married" name="filingStatus" value="married" onchange="updateProgress()">
+                                <label for="married" class="radio-label">
+                                    <span class="label-title">Married</span>
+                                    <span class="label-desc simple-mode-only">Filing together</span>
+                                </label>
+                            </div>
+                            <div class="radio-card">
+                                <input type="radio" id="head" name="filingStatus" value="head" onchange="updateProgress()">
+                                <label for="head" class="radio-label">
+                                    <span class="label-title">Head of House</span>
+                                    <span class="label-desc simple-mode-only">Single parent</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Section (Pro Mode Only) -->
+                    <div class="advanced-section">
+                        <div class="input-group">
+                            <label class="input-label">
+                                Additional Deductions
+                                <span class="help-icon">?</span>
+                                <span class="tooltip">Itemized deductions, retirement contributions (IRA, 401k), health insurance premiums, etc.</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">$</span>
+                                <input type="number" id="additionalDeductions" class="input-field" placeholder="0" min="0">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">
+                                Prior Year Tax (Safe Harbor)
+                                <span class="help-icon">?</span>
+                                <span class="tooltip">Enter last year's total tax to calculate safe harbor payments (pay 100% of last year to avoid penalties).</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">$</span>
+                                <input type="number" id="priorYearTax" class="input-field" placeholder="0" min="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calculate Button -->
+                    <button class="calculate-btn" onclick="calculateTaxes()">
+                        <span id="calculateText">Calculate My Taxes</span>
+                    </button>
+                </div>
+
+                <!-- Educational Links (Simple Mode) -->
+                <div class="info-box simple-mode-only" style="margin-top: 20px;">
+                    <div class="info-title">
+                        📚 New to taxes? Learn the basics!
+                    </div>
+                    <div class="info-text">
+                        <a href="#" onclick="showEducation('basics')" style="color: var(--primary); text-decoration: underline;">What are quarterly taxes?</a> • 
+                        <a href="#" onclick="showEducation('expenses')" style="color: var(--primary); text-decoration: underline;">What counts as an expense?</a> • 
+                        <a href="#" onclick="showEducation('tips')" style="color: var(--primary); text-decoration: underline;">Money-saving tips</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="resultsSection">
+                <!-- Main Results Card -->
+                <div class="result-card highlight">
+                    <div class="result-header">
+                        <span class="card-icon">📊</span>
+                        Your Tax Breakdown
+                    </div>
+                    
+                    <div class="result-row">
+                        <span class="result-label">Your profit (income - expenses)</span>
+                        <span class="result-value" id="netIncome">$0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Self-employment tax</span>
+                        <span class="result-value" id="selfEmploymentTax">$0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Income tax</span>
+                        <span class="result-value" id="federalTax">$0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Total tax you'll owe</span>
+                        <span class="result-value primary" id="totalTax">$0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Tax already paid</span>
+                        <span class="result-value success" id="taxWithheld">$0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Still need to pay</span>
+                        <span class="result-value primary" id="estimatedTaxDue">$0</span>
+                    </div>
+                </div>
+
+                <!-- Quarterly Payments -->
+                <div class="result-card">
+                    <div class="result-header">
+                        <span class="card-icon">📅</span>
+                        Your Payment Schedule
+                    </div>
+                    
+                    <div class="info-box warning simple-mode-only">
+                        <div class="info-title">⚠️ Important: Save these dates!</div>
+                        <div class="info-text">
+                            Add these to your calendar! Missing a payment = penalties. Pay online at IRS.gov or mail a check with Form 1040-ES.
+                        </div>
+                    </div>
+
+                    <div class="quarters-grid">
+                        <div class="quarter-card">
+                            <div class="quarter-number">Quarter 1</div>
+                            <div class="quarter-date">April 15, 2025</div>
+                            <div class="quarter-amount" id="q1Amount">$0</div>
+                            <div class="quarter-status">Jan-Mar income</div>
+                        </div>
+                        <div class="quarter-card">
+                            <div class="quarter-number">Quarter 2</div>
+                            <div class="quarter-date">June 16, 2025</div>
+                            <div class="quarter-amount" id="q2Amount">$0</div>
+                            <div class="quarter-status">Apr-May income</div>
+                        </div>
+                        <div class="quarter-card">
+                            <div class="quarter-number">Quarter 3</div>
+                            <div class="quarter-date">Sept 15, 2025</div>
+                            <div class="quarter-amount" id="q3Amount">$0</div>
+                            <div class="quarter-status">Jun-Aug income</div>
+                        </div>
+                        <div class="quarter-card">
+                            <div class="quarter-number">Quarter 4</div>
+                            <div class="quarter-date">Jan 15, 2026</div>
+                            <div class="quarter-amount" id="q4Amount">$0</div>
+                            <div class="quarter-status">Sep-Dec income</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="result-card">
+                    <div class="result-header">
+                        <span class="card-icon">💡</span>
+                        Good to Know
+                    </div>
+                    
+                    <div class="result-row">
+                        <span class="result-label">Your tax rate</span>
+                        <span class="result-value" id="effectiveRate">0%</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Money left after taxes</span>
+                        <span class="result-value success" id="takeHome">$0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Should save per month</span>
+                        <span class="result-value warning" id="monthlySavings">$0</span>
+                    </div>
+                    <div class="result-row pro-mode-only">
+                        <span class="result-label">Marginal tax bracket</span>
+                        <span class="result-value" id="marginalRate">0%</span>
+                    </div>
+                    <div class="result-row pro-mode-only">
+                        <span class="result-label">QBI deduction</span>
+                        <span class="result-value" id="qbiDeduction">$0</span>
+                    </div>
+                </div>
+
+                <!-- Action Steps -->
+                <div class="info-box success">
+                    <div class="info-title">✅ Your Next Steps</div>
+                    <div class="info-text" id="nextSteps">
+                        1. Set up a separate savings account for taxes<br>
+                        2. Save $X per month starting now<br>
+                        3. Mark payment dates in your calendar<br>
+                        4. Pay online at IRS.gov or get Form 1040-ES
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Carousel -->
+        <div class="tips-carousel">
+            <div class="tips-header">
+                <span class="card-icon">💡</span>
+                Tax Tips for Freelancers
+            </div>
+            <div class="tip-content" id="tipContent">
+                <strong>Tip #1:</strong> Track every business expense! That coffee meeting with a client? Business expense. New laptop for work? Business expense. These reduce your taxes!
+            </div>
+            <div class="tip-navigation">
+                <button class="tip-btn" onclick="previousTip()">← Previous</button>
+                <button class="tip-btn" onclick="nextTip()">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Educational Overlay -->
+    <div class="edu-overlay" id="eduOverlay">
+        <div class="edu-modal">
+            <button class="edu-close" onclick="closeEducation()">×</button>
+            <div class="edu-header">
+                <h2 class="edu-title" id="eduTitle">Tax Basics</h2>
+            </div>
+            <div class="edu-content" id="eduContent">
+                <!-- Content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>📊 Based on 2025 IRS tax rules | <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes" target="_blank">Official IRS Guide</a></p>
+        <p style="margin-top: 10px;">This calculator provides estimates only. For personalized advice, consult a tax professional.</p>
+    </footer>
+
+    <script>
+        // Mode Management
+        let currentMode = 'simple';
+        
+        function setMode(mode) {
+            currentMode = mode;
+            document.body.className = mode + '-mode';
+            
+            // Update toggle buttons
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === mode);
+            });
+            
+            // Update calculate button text
+            document.getElementById('calculateText').textContent = 
+                mode === 'simple' ? 'Calculate My Taxes' : 'Calculate Estimated Taxes';
+            
+            // Clear advanced fields in simple mode
+            if (mode === 'simple') {
+                document.getElementById('additionalDeductions').value = '';
+                document.getElementById('priorYearTax').value = '';
+            }
+        }
+
+        // Progress Tracking
+        function updateProgress() {
+            if (currentMode !== 'simple') return;
+            
+            const fields = ['grossIncome', 'businessExpenses', 'w2Income', 'w2Withheld'];
+            let filled = 0;
+            
+            fields.forEach(id => {
+                if (document.getElementById(id).value) filled++;
+            });
+            
+            if (document.querySelector('input[name="filingStatus"]:checked')) filled++;
+            
+            const progress = Math.round((filled / 5) * 100);
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = progress + '%';
+        }
+
+        // Tips Management
+        const tips = [
+            "<strong>Tip #1:</strong> Track every business expense! That coffee meeting with a client? Business expense. New laptop for work? Business expense. These reduce your taxes!",
+            "<strong>Tip #2:</strong> Set aside 25-30% of your income for taxes. It's better to save too much than too little!",
+            "<strong>Tip #3:</strong> Home office deduction: If you use part of your home exclusively for work, you can deduct a portion of your rent/mortgage and utilities.",
+            "<strong>Tip #4:</strong> Keep digital copies of all receipts. Apps like Expensify or even just photos on your phone work great!",
+            "<strong>Tip #5:</strong> Mileage adds up! Track every business trip - it's 65.5 cents per mile in 2025.",
+            "<strong>Tip #6:</strong> Consider opening a separate business bank account. It makes tax time SO much easier!",
+            "<strong>Tip #7:</strong> Retirement savings reduce your taxes! A SEP-IRA lets you save up to 25% of your income.",
+            "<strong>Tip #8:</strong> Don't forget quarterly taxes! Missing payments = penalties. Set calendar reminders now."
+        ];
+
+        let currentTip = 0;
+
+        function nextTip() {
+            currentTip = (currentTip + 1) % tips.length;
+            document.getElementById('tipContent').innerHTML = tips[currentTip];
+        }
+
+        function previousTip() {
+            currentTip = (currentTip - 1 + tips.length) % tips.length;
+            document.getElementById('tipContent').innerHTML = tips[currentTip];
+        }
+
+        // Educational Content
+        const educationContent = {
+            basics: {
+                title: "What Are Quarterly Taxes?",
+                content: `
+                    <h3>The Basics</h3>
+                    <p>When you're self-employed, you're basically running a tiny business - even if it's just you! Unlike regular employees who have taxes taken out of each paycheck, you need to pay taxes yourself four times a year.</p>
+                    
+                    <h3>Why Quarterly?</h3>
+                    <p>The IRS wants their money throughout the year, not all at once in April. Think of it like a subscription service for being self-employed!</p>
+                    
+                    <h3>What You're Paying</h3>
+                    <p><strong>Self-Employment Tax (15.3%):</strong> This covers Social Security and Medicare - stuff that employers usually pay half of.</p>
+                    <p><strong>Income Tax:</strong> Based on how much you make, using tax brackets from 10% to 37%.</p>
+                    
+                    <h3>The Magic Number: $1,000</h3>
+                    <p>If you'll owe more than $1,000 in taxes for the year, you need to pay quarterly. Otherwise, you might face penalties!</p>
+                `
+            },
+            expenses: {
+                title: "What Can I Deduct?",
+                content: `
+                    <h3>Common Business Expenses</h3>
+                    <p><strong>✓ Home Office:</strong> Internet, portion of rent/utilities if you have a dedicated workspace</p>
+                    <p><strong>✓ Equipment:</strong> Computer, phone, software subscriptions, tools</p>
+                    <p><strong>✓ Travel:</strong> Mileage to client meetings, parking, tolls, business trips</p>
+                    <p><strong>✓ Professional:</strong> Training courses, conferences, professional memberships</p>
+                    <p><strong>✓ Marketing:</strong> Website, business cards, ads, portfolio hosting</p>
+                    
+                    <h3>The Golden Rule</h3>
+                    <p>If it's "ordinary and necessary" for your business, it's probably deductible. When in doubt, keep the receipt and ask a tax pro!</p>
+                    
+                    <h3>What's NOT Deductible</h3>
+                    <p><strong>✗</strong> Personal expenses (your morning coffee, unless meeting a client)</p>
+                    <p><strong>✗</strong> Commuting to a regular workplace</p>
+                    <p><strong>✗</strong> Personal clothes (unless they're uniforms)</p>
+                `
+            },
+            tips: {
+                title: "Money-Saving Tax Tips",
+                content: `
+                    <h3>The 30% Rule</h3>
+                    <p>Always set aside 30% of your income for taxes. Open a separate savings account just for this - don't touch it!</p>
+                    
+                    <h3>Track Everything</h3>
+                    <p>Use apps like QuickBooks Self-Employed, FreshBooks, or even a simple spreadsheet. Every $100 in expenses saves you about $30-40 in taxes!</p>
+                    
+                    <h3>Retirement = Tax Savings</h3>
+                    <p>Contributing to a SEP-IRA or Solo 401(k) reduces your taxable income. You can contribute up to $66,000 for 2025!</p>
+                    
+                    <h3>Health Insurance</h3>
+                    <p>If you're self-employed, you can deduct 100% of health insurance premiums for you and your family.</p>
+                    
+                    <h3>Quarterly Payment Hack</h3>
+                    <p>Instead of scrambling for money 4 times a year, save weekly! Take your quarterly payment, divide by 13, and save that much each week.</p>
+                `
+            }
+        };
+
+        function showEducation(topic) {
+            const content = educationContent[topic];
+            document.getElementById('eduTitle').textContent = content.title;
+            document.getElementById('eduContent').innerHTML = content.content;
+            document.getElementById('eduOverlay').style.display = 'flex';
+        }
+
+        function closeEducation() {
+            document.getElementById('eduOverlay').style.display = 'none';
+        }
+
+        // Format Currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Tax Calculation
+        function calculateTaxes() {
+            // Get input values
+            const grossIncome = parseFloat(document.getElementById('grossIncome').value) || 0;
+            const businessExpenses = parseFloat(document.getElementById('businessExpenses').value) || 0;
+            const w2Income = parseFloat(document.getElementById('w2Income').value) || 0;
+            const w2Withheld = parseFloat(document.getElementById('w2Withheld').value) || 0;
+            const additionalDeductions = parseFloat(document.getElementById('additionalDeductions').value) || 0;
+            const priorYearTax = parseFloat(document.getElementById('priorYearTax').value) || 0;
+            const filingStatus = document.querySelector('input[name="filingStatus"]:checked').value;
+
+            // Validate minimum input
+            if (grossIncome === 0 && w2Income === 0) {
+                alert(currentMode === 'simple' ? 
+                    "Please enter your income first! 😊" : 
+                    "Please enter income information.");
+                return;
+            }
+
+            // Calculate net business income
+            const netBusinessIncome = Math.max(0, grossIncome - businessExpenses);
+
+            // Calculate self-employment tax
+            const selfEmploymentIncome = netBusinessIncome * 0.9235;
+            const socialSecurityWageBase = 176100;
+            
+            let selfEmploymentTax = 0;
+            if (selfEmploymentIncome > 0) {
+                const socialSecurityTax = Math.min(selfEmploymentIncome, socialSecurityWageBase) * 0.124;
+                const medicareTax = selfEmploymentIncome * 0.029;
+                selfEmploymentTax = socialSecurityTax + medicareTax;
+            }
+
+            // Deductible portion of self-employment tax
+            const deductibleSETax = selfEmploymentTax * 0.5;
+
+            // Calculate AGI
+            const totalIncome = netBusinessIncome + w2Income;
+            const agi = totalIncome - deductibleSETax;
+
+            // Standard deductions for 2025
+            const standardDeductions = {
+                single: 15000,
+                married: 30000,
+                head: 22500
+            };
+
+            const standardDeduction = standardDeductions[filingStatus];
+            
+            // QBI deduction (simplified)
+            const tentativeQBI = netBusinessIncome * 0.20;
+            const qbiDeduction = Math.min(tentativeQBI, Math.max(0, (agi - standardDeduction - additionalDeductions) * 0.20));
+
+            // Taxable income
+            const taxableIncome = Math.max(0, agi - standardDeduction - additionalDeductions - qbiDeduction);
+
+            // 2025 Tax brackets
+            const taxBrackets = {
+                single: [
+                    { min: 0, max: 11600, rate: 0.10 },
+                    { min: 11600, max: 47150, rate: 0.12 },
+                    { min: 47150, max: 100525, rate: 0.22 },
+                    { min: 100525, max: 191950, rate: 0.24 },
+                    { min: 191950, max: 243725, rate: 0.32 },
+                    { min: 243725, max: 609350, rate: 0.35 },
+                    { min: 609350, max: Infinity, rate: 0.37 }
+                ],
+                married: [
+                    { min: 0, max: 23200, rate: 0.10 },
+                    { min: 23200, max: 94300, rate: 0.12 },
+                    { min: 94300, max: 201050, rate: 0.22 },
+                    { min: 201050, max: 383900, rate: 0.24 },
+                    { min: 383900, max: 487450, rate: 0.32 },
+                    { min: 487450, max: 731200, rate: 0.35 },
+                    { min: 731200, max: Infinity, rate: 0.37 }
+                ],
+                head: [
+                    { min: 0, max: 16550, rate: 0.10 },
+                    { min: 16550, max: 63100, rate: 0.12 },
+                    { min: 63100, max: 100500, rate: 0.22 },
+                    { min: 100500, max: 191950, rate: 0.24 },
+                    { min: 191950, max: 243700, rate: 0.32 },
+                    { min: 243700, max: 609350, rate: 0.35 },
+                    { min: 609350, max: Infinity, rate: 0.37 }
+                ]
+            };
+
+            // Calculate federal income tax
+            let federalTax = 0;
+            let marginalRate = 0;
+            const brackets = taxBrackets[filingStatus];
+            
+            for (const bracket of brackets) {
+                if (taxableIncome > bracket.min) {
+                    const taxableInBracket = Math.min(taxableIncome - bracket.min, bracket.max - bracket.min);
+                    federalTax += taxableInBracket * bracket.rate;
+                    if (taxableIncome <= bracket.max) {
+                        marginalRate = bracket.rate * 100;
+                        break;
+                    }
+                }
+            }
+
+            // Additional Medicare tax
+            const medicareThresholds = {
+                single: 200000,
+                married: 250000,
+                head: 200000
+            };
+            const medicareThreshold = medicareThresholds[filingStatus];
+            const additionalMedicareTax = Math.max(0, (agi - medicareThreshold) * 0.009);
+
+            // Total taxes
+            const totalTax = selfEmploymentTax + federalTax + additionalMedicareTax;
+            let estimatedTaxDue = Math.max(0, totalTax - w2Withheld);
+
+            // Safe harbor calculation (Pro mode)
+            if (currentMode === 'pro' && priorYearTax > 0) {
+                const safeHarborAmount = agi > 150000 ? priorYearTax * 1.1 : priorYearTax;
+                if (safeHarborAmount < estimatedTaxDue) {
+                    estimatedTaxDue = safeHarborAmount;
+                }
+            }
+            
+            // Quarterly payments
+            const quarterlyPayment = estimatedTaxDue / 4;
+            const monthlySavings = estimatedTaxDue / 12;
+
+            // Effective tax rate
+            const effectiveRate = totalIncome > 0 ? (totalTax / totalIncome) * 100 : 0;
+
+            // Take-home income
+            const takeHome = totalIncome - totalTax;
+
+            // Update UI
+            document.getElementById('netIncome').textContent = formatCurrency(netBusinessIncome);
+            document.getElementById('selfEmploymentTax').textContent = formatCurrency(selfEmploymentTax);
+            document.getElementById('federalTax').textContent = formatCurrency(federalTax);
+            document.getElementById('totalTax').textContent = formatCurrency(totalTax);
+            document.getElementById('taxWithheld').textContent = formatCurrency(w2Withheld);
+            document.getElementById('estimatedTaxDue').textContent = formatCurrency(estimatedTaxDue);
+            
+            // Quarterly amounts
+            document.getElementById('q1Amount').textContent = formatCurrency(quarterlyPayment);
+            document.getElementById('q2Amount').textContent = formatCurrency(quarterlyPayment);
+            document.getElementById('q3Amount').textContent = formatCurrency(quarterlyPayment);
+            document.getElementById('q4Amount').textContent = formatCurrency(quarterlyPayment);
+            
+            // Additional info
+            document.getElementById('effectiveRate').textContent = effectiveRate.toFixed(1) + '%';
+            document.getElementById('marginalRate').textContent = marginalRate.toFixed(0) + '%';
+            document.getElementById('qbiDeduction').textContent = formatCurrency(qbiDeduction);
+            document.getElementById('takeHome').textContent = formatCurrency(takeHome);
+            document.getElementById('monthlySavings').textContent = formatCurrency(monthlySavings);
+
+            // Update next steps
+            const stepsText = currentMode === 'simple' ? 
+                `1. Set up a separate savings account just for taxes<br>
+                2. Save ${formatCurrency(monthlySavings)} every month starting now<br>
+                3. Add these payment dates to your calendar with reminders<br>
+                4. Pay online at IRS.gov (easiest!) or mail Form 1040-ES` :
+                `1. Set aside ${formatCurrency(monthlySavings)}/month for estimated taxes<br>
+                2. Make quarterly payments via EFTPS or IRS Direct Pay<br>
+                3. Consider safe harbor payment of ${priorYearTax > 0 ? formatCurrency(priorYearTax) : 'prior year tax'}<br>
+                4. Track expenses meticulously for potential deductions`;
+            
+            document.getElementById('nextSteps').innerHTML = stepsText;
+
+            // Show results
+            document.getElementById('resultsSection').classList.add('show');
+            
+            // Scroll to results
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setMode('simple');
+            
+            // Add enter key support
+            document.querySelectorAll('.input-field').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        calculateTaxes();
+                    }
+                });
+            });
+
+            // Close education overlay on outside click
+            document.getElementById('eduOverlay').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeEducation();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
