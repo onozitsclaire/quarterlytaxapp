@@ -1371,10 +1371,10 @@
         <div class="welcome-card content-block" style="display: block;">
             <h2 class="welcome-title">Frequently Asked Questions (FAQ)</h2>
             
-            <h4>1. What exactly *are* quarterly taxes?</h4>
+            <h4>1. What exactly <em>are</em> quarterly taxes?</h4>
             <p>Think of it this way: when you have a W-2 job, your employer withholds taxes from every paycheck. When you're self-employed, you are your own payroll department. The IRS requires you to send them those taxes throughout the year in four "estimated" payments instead of all at once in April. It's just the government's way of ensuring a steady flow of tax revenue.</p>
 
-            <h4>2. Do I *really* have to pay them?</h4>
+            <h4>2. Do I <em>really</em> have to pay them?</h4>
             <p>The simple rule of thumb is this: if you expect to owe <strong>at least $1,000 in tax</strong> for the year, then yes, you need to pay estimated quarterly taxes. This applies to most full-time freelancers and even many people with a side hustle.</p>
             
             <h4>3. How much should I set aside from each payment?</h4>
@@ -1446,7 +1446,6 @@
             }
         }
 
-        // Toggle spouse age input based on filing status
         function toggleSpouseAge() {
             const filingStatus = document.querySelector('input[name="filingStatus"]:checked').value;
             const spouseLabel = document.getElementById('spouseAgeLabel');
@@ -1638,7 +1637,7 @@
             // 7. Apply Credits and Finalize Tax
             let childTaxCredit = 0;
             const ctcPhaseoutStart = (filingStatus === 'married') ? 400000 : 200000;
-            if (agi < ctcPhaseoutStart + 40000) { // Phaseout range is $40k
+            if (agi < ctcPhaseoutStart + 40000) { 
                 let maxCredit = numChildren * 2200;
                 if (agi > ctcPhaseoutStart) {
                     const excessAgi = Math.ceil((agi - ctcPhaseoutStart) / 1000) * 1000;
