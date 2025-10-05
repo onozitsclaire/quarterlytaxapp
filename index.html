@@ -86,25 +86,48 @@
             opacity: 0.95;
         }
 
+        .new-badge {
+            display: inline-block;
+            background: var(--warning);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-top: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
         /* Container */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: -30px auto 40px;
             padding: 0 20px;
             position: relative;
         }
 
-        /* Welcome Card (Simple Mode) */
+        /* Welcome Cards */
         .welcome-card {
             background: white;
             border-radius: 16px;
             padding: 30px;
-            margin-bottom: 30px;
+            margin: 0 auto 30px;
             box-shadow: var(--card-shadow);
             display: none;
+            max-width: 1200px;
+            text-align: center;
         }
 
-        .simple-mode .welcome-card {
+        .simple-mode .welcome-card.simple-welcome {
+            display: block;
+        }
+
+        .pro-mode .welcome-card.pro-welcome {
             display: block;
         }
 
@@ -120,6 +143,9 @@
             font-size: 1rem;
             line-height: 1.6;
             margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .progress-bar {
@@ -127,7 +153,8 @@
             height: 8px;
             border-radius: 50px;
             overflow: hidden;
-            margin-bottom: 10px;
+            margin: 0 auto 10px;
+            max-width: 500px;
         }
 
         .progress-fill {
@@ -143,11 +170,35 @@
             color: var(--gray);
         }
 
+        .pro-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
         /* Main Layout */
         .main-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         @media (max-width: 968px) {
@@ -163,6 +214,7 @@
             padding: 30px;
             box-shadow: var(--card-shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
         }
 
         .card:hover {
@@ -190,6 +242,17 @@
 
         .card-icon {
             font-size: 1.5rem;
+        }
+
+        /* New Tag for OBBB Features */
+        .new-tag {
+            background: linear-gradient(135deg, var(--warning), #f97316);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 8px;
         }
 
         /* Input Groups */
@@ -370,6 +433,24 @@
             font-weight: normal;
         }
 
+        /* OBBB Deductions Section */
+        .obbb-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .obbb-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         /* Calculate Button */
         .calculate-btn {
             width: 100%;
@@ -487,7 +568,7 @@
         /* Quarterly Payments Grid */
         .quarters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 15px;
             margin-top: 20px;
         }
@@ -581,54 +662,103 @@
             line-height: 1.5;
         }
 
-        /* Tips Carousel */
+        /* Tips Carousel - Enhanced Visual Design */
         .tips-carousel {
-            background: white;
-            border-radius: 16px;
-            padding: 25px;
-            margin-top: 30px;
-            box-shadow: var(--card-shadow);
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 2px solid var(--primary-light);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px auto 0;
+            max-width: 1200px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
             position: relative;
             overflow: hidden;
+        }
+
+        .tips-carousel::before {
+            content: '💡';
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.05;
+            right: -20px;
+            top: -20px;
+            transform: rotate(15deg);
         }
 
         .tips-header {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 15px;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
         }
 
         .tip-content {
-            color: var(--gray);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            min-height: 60px;
+            color: var(--dark);
+            font-size: 1rem;
+            line-height: 1.8;
+            min-height: 80px;
+            text-align: center;
+            padding: 0 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tip-content strong {
+            color: var(--primary);
+            font-weight: 700;
         }
 
         .tip-navigation {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .tip-btn {
-            padding: 8px 16px;
-            background: var(--light-gray);
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
-            color: var(--dark);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .tip-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .tip-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            width: 24px;
+            border-radius: 4px;
             background: var(--primary);
-            color: white;
         }
 
         /* Educational Overlay */
@@ -730,15 +860,28 @@
             text-decoration: underline;
         }
 
-        /* Responsive */
+        /* Mobile Responsive */
         @media (max-width: 640px) {
             .mode-toggle {
                 top: 10px;
                 right: 10px;
+                transform: scale(0.9);
             }
 
             .header h1 {
                 font-size: 1.8rem;
+            }
+
+            .header .subtitle {
+                font-size: 1rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .card {
+                padding: 20px;
             }
 
             .quarters-grid {
@@ -751,6 +894,24 @@
 
             .radio-card {
                 width: 100%;
+            }
+
+            .tip-content {
+                padding: 0 20px;
+                font-size: 0.95rem;
+            }
+
+            .pro-stats {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .tips-carousel {
+                padding: 20px;
+            }
+
+            .tips-carousel::before {
+                font-size: 80px;
             }
         }
     </style>
@@ -766,12 +927,13 @@
     <header class="header">
         <h1>🎯 TaxBuddy</h1>
         <p class="subtitle">Your Friendly Quarterly Tax Calculator</p>
+        <span class="new-badge">🎉 Updated with 2025 One Big Beautiful Bill Tax Savings!</span>
     </header>
 
     <!-- Main Container -->
     <div class="container">
-        <!-- Welcome Card (Simple Mode Only) -->
-        <div class="welcome-card">
+        <!-- Welcome Card for Simple Mode -->
+        <div class="welcome-card simple-welcome">
             <h2 class="welcome-title">👋 Welcome! Let's Make Taxes Easy</h2>
             <p class="welcome-text">
                 Don't worry if taxes feel confusing - we'll walk through this together! Just fill in what you know, and we'll calculate everything for you. Hover over any <span class="help-icon">?</span> for help.
@@ -780,6 +942,32 @@
                 <div class="progress-fill" id="progressBar"></div>
             </div>
             <p class="progress-text">Progress: <span id="progressText">0%</span> complete</p>
+        </div>
+
+        <!-- Welcome Card for Pro Mode -->
+        <div class="welcome-card pro-welcome">
+            <h2 class="welcome-title">📊 Professional Tax Calculator</h2>
+            <p class="welcome-text">
+                Advanced quarterly tax calculator with 2025 OBBB deductions, safe harbor calculations, and comprehensive tax planning features. All fields are optional - calculate with precision.
+            </p>
+            <div class="pro-stats">
+                <div class="stat-item">
+                    <div class="stat-value">15.3%</div>
+                    <div class="stat-label">SE Tax Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$176,100</div>
+                    <div class="stat-label">SS Wage Base</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">20%</div>
+                    <div class="stat-label">QBI Deduction</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">$25,000</div>
+                    <div class="stat-label">Max Tips Deduction</div>
+                </div>
+            </div>
         </div>
 
         <!-- Main Layout -->
@@ -884,6 +1072,53 @@
                         </div>
                     </div>
 
+                    <!-- OBBB New Deductions Section -->
+                    <div class="obbb-section">
+                        <h3 class="obbb-title">
+                            🎁 New 2025 Tax Savings (One Big Beautiful Bill)
+                            <span class="new-tag">NEW!</span>
+                        </h3>
+                        
+                        <div class="input-group">
+                            <label class="input-label">
+                                Tips Income <span class="new-tag">Up to $25k tax-free!</span>
+                                <span class="help-icon">?</span>
+                                <span class="tooltip">If you receive tips (delivery, rideshare, beauty services, etc.), up to $25,000 can be tax-free! Must be in an IRS-approved tipped occupation.</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">$</span>
+                                <input type="number" id="tipsIncome" class="input-field" placeholder="0" min="0" max="25000">
+                            </div>
+                            <p class="input-example">Example: DoorDash tips, Uber tips, hair stylist tips</p>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">
+                                Overtime Pay <span class="new-tag">Up to $12.5k tax-free!</span>
+                                <span class="help-icon">?</span>
+                                <span class="tooltip">The "half" of time-and-a-half overtime pay is now deductible! Up to $12,500 for singles, $25,000 for married.</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">$</span>
+                                <input type="number" id="overtimePay" class="input-field" placeholder="0" min="0" max="25000">
+                            </div>
+                            <p class="input-example">Example: If you earn $30/hr overtime (1.5x $20), enter $10/hr × hours worked</p>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">
+                                Car Loan Interest <span class="new-tag">Up to $10k deductible!</span>
+                                <span class="help-icon">?</span>
+                                <span class="tooltip">Interest on a car loan for a new U.S.-assembled vehicle is deductible up to $10,000. Must be originated after Dec 31, 2024.</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <span class="input-prefix">$</span>
+                                <input type="number" id="carLoanInterest" class="input-field" placeholder="0" min="0" max="10000">
+                            </div>
+                            <p class="input-example">Example: $400/month interest × 12 = $4,800/year</p>
+                        </div>
+                    </div>
+
                     <!-- Advanced Section (Pro Mode Only) -->
                     <div class="advanced-section">
                         <div class="input-group">
@@ -925,7 +1160,7 @@
                     <div class="info-text">
                         <a href="#" onclick="showEducation('basics')" style="color: var(--primary); text-decoration: underline;">What are quarterly taxes?</a> • 
                         <a href="#" onclick="showEducation('expenses')" style="color: var(--primary); text-decoration: underline;">What counts as an expense?</a> • 
-                        <a href="#" onclick="showEducation('tips')" style="color: var(--primary); text-decoration: underline;">Money-saving tips</a>
+                        <a href="#" onclick="showEducation('obbb')" style="color: var(--primary); text-decoration: underline;">New 2025 tax savings</a>
                     </div>
                 </div>
             </div>
@@ -950,6 +1185,10 @@
                     <div class="result-row">
                         <span class="result-label">Income tax</span>
                         <span class="result-value" id="federalTax">$0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">OBBB tax savings</span>
+                        <span class="result-value success" id="obbbSavings">$0</span>
                     </div>
                     <div class="result-row">
                         <span class="result-label">Total tax you'll owe</span>
@@ -1049,18 +1288,30 @@
             </div>
         </div>
 
-        <!-- Tips Carousel -->
+        <!-- Tips Carousel - Enhanced Visual Design -->
         <div class="tips-carousel">
             <div class="tips-header">
                 <span class="card-icon">💡</span>
                 Tax Tips for Freelancers
             </div>
             <div class="tip-content" id="tipContent">
-                <strong>Tip #1:</strong> Track every business expense! That coffee meeting with a client? Business expense. New laptop for work? Business expense. These reduce your taxes!
+                <strong>Tip #1:</strong> NEW for 2025! If you receive tips (delivery, rideshare, beauty services), up to $25,000 can be TAX-FREE! Make sure to track all your tips.
             </div>
             <div class="tip-navigation">
                 <button class="tip-btn" onclick="previousTip()">← Previous</button>
                 <button class="tip-btn" onclick="nextTip()">Next →</button>
+            </div>
+            <div class="tip-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+                <span class="dot" data-index="3"></span>
+                <span class="dot" data-index="4"></span>
+                <span class="dot" data-index="5"></span>
+                <span class="dot" data-index="6"></span>
+                <span class="dot" data-index="7"></span>
+                <span class="dot" data-index="8"></span>
+                <span class="dot" data-index="9"></span>
             </div>
         </div>
     </div>
@@ -1080,7 +1331,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>📊 Based on 2025 IRS tax rules | <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes" target="_blank">Official IRS Guide</a></p>
+        <p>📊 Based on 2025 IRS tax rules & One Big Beautiful Bill Act | <a href="https://www.irs.gov/businesses/small-businesses-self-employed/estimated-taxes" target="_blank">Official IRS Guide</a></p>
         <p style="margin-top: 10px;">This calculator provides estimates only. For personalized advice, consult a tax professional.</p>
     </footer>
 
@@ -1126,31 +1377,40 @@
             document.getElementById('progressText').textContent = progress + '%';
         }
 
-        // Tips Management
+        // Tips Management - Updated with OBBB info
         const tips = [
-            "<strong>Tip #1:</strong> Track every business expense! That coffee meeting with a client? Business expense. New laptop for work? Business expense. These reduce your taxes!",
-            "<strong>Tip #2:</strong> Set aside 25-30% of your income for taxes. It's better to save too much than too little!",
-            "<strong>Tip #3:</strong> Home office deduction: If you use part of your home exclusively for work, you can deduct a portion of your rent/mortgage and utilities.",
-            "<strong>Tip #4:</strong> Keep digital copies of all receipts. Apps like Expensify or even just photos on your phone work great!",
-            "<strong>Tip #5:</strong> Mileage adds up! Track every business trip - it's 65.5 cents per mile in 2025.",
-            "<strong>Tip #6:</strong> Consider opening a separate business bank account. It makes tax time SO much easier!",
-            "<strong>Tip #7:</strong> Retirement savings reduce your taxes! A SEP-IRA lets you save up to 25% of your income.",
-            "<strong>Tip #8:</strong> Don't forget quarterly taxes! Missing payments = penalties. Set calendar reminders now."
+            "<strong>Tip #1:</strong> NEW for 2025! If you receive tips (delivery, rideshare, beauty services), up to $25,000 can be TAX-FREE! Make sure to track all your tips.",
+            "<strong>Tip #2:</strong> The 1099-K threshold is back to $20,000 + 200 transactions for 2025. But you still need to report ALL income, even without a 1099!",
+            "<strong>Tip #3:</strong> Set aside 25-30% of your income for taxes. It's better to save too much than too little!",
+            "<strong>Tip #4:</strong> NEW: Car loan interest is deductible up to $10,000! Must be a new U.S.-assembled vehicle with a loan after Dec 31, 2024.",
+            "<strong>Tip #5:</strong> Home office deduction: If you use part of your home exclusively for work, you can deduct a portion of your rent/mortgage and utilities.",
+            "<strong>Tip #6:</strong> Mileage adds up! Track every business trip - it's 67 cents per mile in 2025.",
+            "<strong>Tip #7:</strong> The QBI deduction is now PERMANENT! You can deduct 20% of your qualified business income.",
+            "<strong>Tip #8:</strong> Keep digital copies of all receipts. Apps like Expensify or even just photos on your phone work great!",
+            "<strong>Tip #9:</strong> Retirement savings reduce your taxes! A SEP-IRA lets you save up to 25% of your income.",
+            "<strong>Tip #10:</strong> Don't forget quarterly taxes! Missing payments = penalties. Set calendar reminders for Apr 15, Jun 16, Sep 15, and Jan 15."
         ];
 
         let currentTip = 0;
 
         function nextTip() {
             currentTip = (currentTip + 1) % tips.length;
-            document.getElementById('tipContent').innerHTML = tips[currentTip];
+            updateTipDisplay();
         }
 
         function previousTip() {
             currentTip = (currentTip - 1 + tips.length) % tips.length;
-            document.getElementById('tipContent').innerHTML = tips[currentTip];
+            updateTipDisplay();
         }
 
-        // Educational Content
+        function updateTipDisplay() {
+            document.getElementById('tipContent').innerHTML = tips[currentTip];
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentTip);
+            });
+        }
+
+        // Educational Content - Updated with OBBB
         const educationContent = {
             basics: {
                 title: "What Are Quarterly Taxes?",
@@ -1188,23 +1448,26 @@
                     <p><strong>✗</strong> Personal clothes (unless they're uniforms)</p>
                 `
             },
-            tips: {
-                title: "Money-Saving Tax Tips",
+            obbb: {
+                title: "New 2025 Tax Savings (One Big Beautiful Bill)",
                 content: `
-                    <h3>The 30% Rule</h3>
-                    <p>Always set aside 30% of your income for taxes. Open a separate savings account just for this - don't touch it!</p>
+                    <h3>🎁 No Tax on Tips!</h3>
+                    <p>Up to <strong>$25,000</strong> in tips can be tax-free if you're in an IRS-approved tipped occupation (delivery, rideshare, beauty, food service, etc.). This alone could save you $3,000-$7,000 in taxes!</p>
                     
-                    <h3>Track Everything</h3>
-                    <p>Use apps like QuickBooks Self-Employed, FreshBooks, or even a simple spreadsheet. Every $100 in expenses saves you about $30-40 in taxes!</p>
+                    <h3>⏰ No Tax on Overtime!</h3>
+                    <p>The "half" of time-and-a-half overtime is now deductible. Up to <strong>$12,500</strong> for singles, $25,000 for married couples. If you work overtime, this is huge!</p>
                     
-                    <h3>Retirement = Tax Savings</h3>
-                    <p>Contributing to a SEP-IRA or Solo 401(k) reduces your taxable income. You can contribute up to $66,000 for 2025!</p>
+                    <h3>🚗 Car Loan Interest Deduction!</h3>
+                    <p>Up to <strong>$10,000</strong> in car loan interest is deductible if you bought a new U.S.-assembled vehicle after Dec 31, 2024. Perfect for rideshare drivers!</p>
                     
-                    <h3>Health Insurance</h3>
-                    <p>If you're self-employed, you can deduct 100% of health insurance premiums for you and your family.</p>
+                    <h3>📈 Higher Standard Deduction!</h3>
+                    <p>The standard deduction for 2025 is <strong>$15,750</strong> (single) or <strong>$31,500</strong> (married). That's income you don't pay taxes on!</p>
                     
-                    <h3>Quarterly Payment Hack</h3>
-                    <p>Instead of scrambling for money 4 times a year, save weekly! Take your quarterly payment, divide by 13, and save that much each week.</p>
+                    <h3>💼 QBI Deduction Made Permanent!</h3>
+                    <p>The 20% deduction on qualified business income is now permanent. This means 20% of your profit might be tax-free!</p>
+                    
+                    <h3>📱 1099-K Threshold Raised!</h3>
+                    <p>You'll only get a 1099-K if you have over $20,000 AND 200+ transactions on a platform. BUT you still need to report all income!</p>
                 `
             }
         };
@@ -1230,7 +1493,7 @@
             }).format(amount);
         }
 
-        // Tax Calculation
+        // Tax Calculation - Updated with OBBB
         function calculateTaxes() {
             // Get input values
             const grossIncome = parseFloat(document.getElementById('grossIncome').value) || 0;
@@ -1240,6 +1503,11 @@
             const additionalDeductions = parseFloat(document.getElementById('additionalDeductions').value) || 0;
             const priorYearTax = parseFloat(document.getElementById('priorYearTax').value) || 0;
             const filingStatus = document.querySelector('input[name="filingStatus"]:checked').value;
+
+            // OBBB Deductions
+            let tipsIncome = parseFloat(document.getElementById('tipsIncome').value) || 0;
+            let overtimePay = parseFloat(document.getElementById('overtimePay').value) || 0;
+            let carLoanInterest = parseFloat(document.getElementById('carLoanInterest').value) || 0;
 
             // Validate minimum input
             if (grossIncome === 0 && w2Income === 0) {
@@ -1251,6 +1519,36 @@
 
             // Calculate net business income
             const netBusinessIncome = Math.max(0, grossIncome - businessExpenses);
+
+            // Apply OBBB deduction limits and phase-outs
+            const totalIncome = netBusinessIncome + w2Income;
+            
+            // Tips deduction (max $25,000, phases out at $150k/$300k)
+            tipsIncome = Math.min(tipsIncome, 25000);
+            if (filingStatus === 'married' && totalIncome > 300000) {
+                tipsIncome = 0;
+            } else if (totalIncome > 150000) {
+                tipsIncome = 0;
+            }
+
+            // Overtime deduction (max $12,500/$25,000)
+            const overtimeLimit = filingStatus === 'married' ? 25000 : 12500;
+            overtimePay = Math.min(overtimePay, overtimeLimit);
+            if (filingStatus === 'married' && totalIncome > 300000) {
+                overtimePay = 0;
+            } else if (totalIncome > 150000) {
+                overtimePay = 0;
+            }
+
+            // Car loan interest (max $10,000, phases out at $100k/$200k)
+            carLoanInterest = Math.min(carLoanInterest, 10000);
+            if (filingStatus === 'married' && totalIncome > 200000) {
+                carLoanInterest = 0;
+            } else if (totalIncome > 100000) {
+                carLoanInterest = 0;
+            }
+
+            const totalOBBBDeductions = tipsIncome + overtimePay + carLoanInterest;
 
             // Calculate self-employment tax
             const selfEmploymentIncome = netBusinessIncome * 0.9235;
@@ -1266,27 +1564,26 @@
             // Deductible portion of self-employment tax
             const deductibleSETax = selfEmploymentTax * 0.5;
 
-            // Calculate AGI
-            const totalIncome = netBusinessIncome + w2Income;
+            // Calculate AGI (with OBBB adjustments)
             const agi = totalIncome - deductibleSETax;
 
-            // Standard deductions for 2025
+            // Updated standard deductions for 2025 OBBB
             const standardDeductions = {
-                single: 15000,
-                married: 30000,
-                head: 22500
+                single: 15750,
+                married: 31500,
+                head: 23625
             };
 
             const standardDeduction = standardDeductions[filingStatus];
             
-            // QBI deduction (simplified)
+            // QBI deduction (now permanent under OBBB)
             const tentativeQBI = netBusinessIncome * 0.20;
-            const qbiDeduction = Math.min(tentativeQBI, Math.max(0, (agi - standardDeduction - additionalDeductions) * 0.20));
+            const qbiDeduction = Math.min(tentativeQBI, Math.max(0, (agi - standardDeduction - additionalDeductions - totalOBBBDeductions) * 0.20));
 
-            // Taxable income
-            const taxableIncome = Math.max(0, agi - standardDeduction - additionalDeductions - qbiDeduction);
+            // Taxable income (after all OBBB deductions)
+            const taxableIncome = Math.max(0, agi - standardDeduction - additionalDeductions - qbiDeduction - totalOBBBDeductions);
 
-            // 2025 Tax brackets
+            // 2025 Tax brackets (made permanent by OBBB)
             const taxBrackets = {
                 single: [
                     { min: 0, max: 11600, rate: 0.10 },
@@ -1364,10 +1661,14 @@
             // Take-home income
             const takeHome = totalIncome - totalTax;
 
+            // Calculate OBBB savings
+            const obbbSavings = totalOBBBDeductions * (marginalRate / 100 + 0.153);
+
             // Update UI
             document.getElementById('netIncome').textContent = formatCurrency(netBusinessIncome);
             document.getElementById('selfEmploymentTax').textContent = formatCurrency(selfEmploymentTax);
             document.getElementById('federalTax').textContent = formatCurrency(federalTax);
+            document.getElementById('obbbSavings').textContent = formatCurrency(obbbSavings);
             document.getElementById('totalTax').textContent = formatCurrency(totalTax);
             document.getElementById('taxWithheld').textContent = formatCurrency(w2Withheld);
             document.getElementById('estimatedTaxDue').textContent = formatCurrency(estimatedTaxDue);
@@ -1390,11 +1691,13 @@
                 `1. Set up a separate savings account just for taxes<br>
                 2. Save ${formatCurrency(monthlySavings)} every month starting now<br>
                 3. Add these payment dates to your calendar with reminders<br>
-                4. Pay online at IRS.gov (easiest!) or mail Form 1040-ES` :
+                4. Pay online at IRS.gov (easiest!) or mail Form 1040-ES<br>
+                5. Track your tips and overtime - they're tax-free up to limits!` :
                 `1. Set aside ${formatCurrency(monthlySavings)}/month for estimated taxes<br>
                 2. Make quarterly payments via EFTPS or IRS Direct Pay<br>
                 3. Consider safe harbor payment of ${priorYearTax > 0 ? formatCurrency(priorYearTax) : 'prior year tax'}<br>
-                4. Track expenses meticulously for potential deductions`;
+                4. Track OBBB deductions: tips ($25k), overtime ($12.5k), car interest ($10k)<br>
+                5. Monitor income for phase-out thresholds`;
             
             document.getElementById('nextSteps').innerHTML = stepsText;
 
