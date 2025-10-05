@@ -199,12 +199,24 @@
             gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
+            width: 100%;
         }
 
         @media (max-width: 968px) {
             .main-layout {
                 grid-template-columns: 1fr;
             }
+        }
+
+        .input-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .results-section {
+            width: 100%;
         }
 
         /* Cards */
@@ -215,6 +227,9 @@
             box-shadow: var(--card-shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
+            border: 2px solid var(--light-gray);
         }
 
         .card:hover {
@@ -259,6 +274,7 @@
         .input-group {
             margin-bottom: 25px;
             position: relative;
+            width: 100%;
         }
 
         .input-label {
@@ -436,16 +452,17 @@
         /* OBBB Deductions Section */
         .obbb-section {
             background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 30px;
             margin-top: 25px;
+            border: 2px solid var(--warning);
         }
 
         .obbb-title {
             font-size: 1.1rem;
             font-weight: 700;
             color: #92400e;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -494,6 +511,9 @@
         .results-section {
             display: none;
             animation: fadeIn 0.5s ease;
+            width: 100%;
+            flex-direction: column;
+            gap: 20px;
         }
 
         @keyframes fadeIn {
@@ -502,16 +522,18 @@
         }
 
         .results-section.show {
-            display: block;
+            display: flex;
         }
 
         .result-card {
             background: white;
             border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 20px;
+            padding: 30px;
             box-shadow: var(--card-shadow);
             border: 2px solid var(--light-gray);
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto;
         }
 
         .result-card.highlight {
@@ -527,6 +549,8 @@
             font-weight: 700;
             color: var(--dark);
             margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-gray);
         }
 
         .result-row {
@@ -628,38 +652,63 @@
             font-weight: 600;
         }
 
-        /* Info Boxes */
+        /* Info Boxes - Updated to match card styling */
         .info-box {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-            border-left: 4px solid var(--secondary);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 20px;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            width: 100%;
+            max-width: 100%;
+            margin: 0 auto 20px;
+            border: 2px solid var(--light-gray);
         }
 
         .info-box.warning {
             background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border-left-color: var(--warning);
+            border-color: var(--warning);
         }
 
         .info-box.success {
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border-left-color: var(--success);
+            border-color: var(--success);
+        }
+
+        .info-box.simple-mode-only {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-color: var(--secondary);
         }
 
         .info-title {
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 1.1rem;
         }
 
         .info-text {
             color: var(--gray);
-            font-size: 0.9rem;
-            line-height: 1.5;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .info-box.simple-mode-only .info-text {
+            text-align: center;
+        }
+        
+        .info-box.simple-mode-only .info-title {
+            justify-content: center;
+        }
+        
+        .info-box.warning.simple-mode-only .info-title {
+            justify-content: center;
+        }
+        
+        .info-box.warning.simple-mode-only .info-text {
+            text-align: center;
         }
 
         /* Tips Carousel - Enhanced Visual Design */
@@ -880,8 +929,10 @@
                 padding: 0 15px;
             }
 
-            .card {
+            .card, .result-card, .info-box {
                 padding: 20px;
+                margin-left: 0;
+                margin-right: 0;
             }
 
             .quarters-grid {
@@ -912,6 +963,14 @@
 
             .tips-carousel::before {
                 font-size: 80px;
+            }
+
+            .obbb-section {
+                padding: 20px;
+            }
+
+            .info-box.simple-mode-only {
+                margin-top: 0;
             }
         }
     </style>
@@ -1153,7 +1212,7 @@
                 </div>
 
                 <!-- Educational Links (Simple Mode) -->
-                <div class="info-box simple-mode-only" style="margin-top: 20px;">
+                <div class="info-box simple-mode-only" style="margin-top: 0;">
                     <div class="info-title">
                         📚 New to taxes? Learn the basics!
                     </div>
