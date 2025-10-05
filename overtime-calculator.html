@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 Overtime Pay Deduction Calculator | TaxBuddy</title>
+    <meta name="description" content="Calculate your 2025 tax deduction for overtime pay under the new 'One Big Beautiful Bill Act'. See how much this new tax break can save you.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary: #14b8a6;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --white: #ffffff;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --hover-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--bg-gradient);
+            color: white;
+            padding: 60px 20px 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: -60px auto 40px;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--card-shadow);
+            border: 2px solid var(--light-gray);
+            margin-bottom: 30px;
+        }
+        
+        .card-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .help-icon {
+            width: 18px;
+            height: 18px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            cursor: help;
+            font-weight: bold;
+        }
+
+        .tooltip {
+            position: absolute;
+            background: var(--dark);
+            color: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            max-width: 250px;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--dark);
+        }
+        
+        .input-label {
+            position: relative;
+        }
+
+        .help-icon:hover + .tooltip {
+            opacity: 1;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            padding-left: 36px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .input-prefix {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-weight: 600;
+            pointer-events: none;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .radio-card {
+            flex: 1;
+            min-width: 120px;
+            position: relative;
+        }
+
+        .radio-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-label {
+            display: block;
+            padding: 12px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .radio-label:hover {
+            border-color: var(--primary-light);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .radio-card input[type="radio"]:checked + .radio-label {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--bg-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid var(--light-gray);
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .results-section.show {
+            display: block;
+        }
+
+        .result-label {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .result-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .result-explanation {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            color: var(--dark);
+            border: 1px solid var(--light-gray);
+        }
+        
+        .next-step-link {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 24px;
+            background: var(--success);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .next-step-link:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+        
+        .content-block {
+            text-align: left;
+        }
+        .content-block h2 {
+            text-align: center;
+        }
+        .content-block h4 {
+            font-weight: 700;
+            color: var(--dark);
+            margin-top: 25px;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        .content-block ul {
+            list-style-position: outside;
+            padding-left: 20px;
+        }
+        .content-block ul li {
+            margin-bottom: 10px;
+            padding-left: 5px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                padding: 40px 20px 60px;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 0 15px;
+            }
+            .card {
+                padding: 25px;
+            }
+            .card-title {
+                font-size: 1.5rem;
+            }
+            .radio-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>🎯 TaxBuddy</h1>
+        <p class="subtitle">A simple suite of free tools for freelancers and gig workers.</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">2025 Overtime Pay Deduction Calculator</h2>
+                <p class="card-description">Find out how much of your overtime pay is deductible under the new 2025 tax laws.</p>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">
+                    Your Total Estimated Annual Income
+                    <span class="help-icon">?</span>
+                    <span class="tooltip">Enter your total expected income for the year, including freelance profit and any W-2 salary. This is used to check for income limits.</span>
+                </label>
+                <div class="input-wrapper">
+                    <span class="input-prefix">$</span>
+                    <input type="number" id="totalIncome" class="input-field" placeholder="e.g., 75000" min="0">
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Your Filing Status</label>
+                <div class="radio-group">
+                    <div class="radio-card">
+                        <input type="radio" id="single" name="filingStatus" value="single" checked>
+                        <label for="single" class="radio-label">Single</label>
+                    </div>
+                    <div class="radio-card">
+                        <input type="radio" id="married" name="filingStatus" value="married">
+                        <label for="married" class="radio-label">Married</label>
+                    </div>
+                    <div class="radio-card">
+                        <input type="radio" id="head" name="filingStatus" value="head">
+                        <label for="head" class="radio-label">Head of House</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">
+                    Total Overtime Pay Received This Year
+                    <span class="help-icon">?</span>
+                    <span class="tooltip">Enter the total amount of "time-and-a-half" pay you expect to earn for the year. The calculator will figure out the deductible "half" portion.</span>
+                </label>
+                <div class="input-wrapper">
+                    <span class="input-prefix">$</span>
+                    <input type="number" id="overtimePay" class="input-field" placeholder="e.g., 6000" min="0">
+                </div>
+            </div>
+
+            <button class="calculate-btn" onclick="calculateDeduction()">Calculate My Deduction</button>
+
+            <div class="results-section" id="resultsSection">
+                <p class="result-label">Your Deductible Overtime Amount for 2025 is:</p>
+                <h3 class="result-value" id="resultValue">$0</h3>
+                <div class="result-explanation" id="resultExplanation">
+                    Enter your information above to see your potential deduction.
+                </div>
+                <a href="/index.html" class="next-step-link" id="nextStepLink" style="display: none;">
+                    Next: Calculate Your Full Quarterly Tax &rarr;
+                </a>
+            </div>
+        </div>
+
+        <div class="card content-block">
+            <h2>Understanding the New Overtime Pay Deduction</h2>
+            <p style="text-align: center; color: var(--gray); margin-top: 5px;">Another major benefit from the "One Big Beautiful Bill Act" is a new tax deduction for hourly workers who earn overtime.</p>
+            
+            <h4>What is the overtime deduction?</h4>
+            <p>For 2025, you can deduct the "half" portion of your "time-and-a-half" overtime pay. For example, if your regular rate is $20/hour, your overtime rate is $30/hour. The extra $10 is the "half" portion. This new law lets you deduct the total of that extra pay from your taxable income.</p>
+
+            <h4>What are the limits on the deduction?</h4>
+            <p>The total amount you can deduct is capped each year. The limits are:</p>
+            <ul>
+                <li><strong>$12,500 per year</strong> for Single and Head of Household filers.</li>
+                <li><strong>$25,000 per year</strong> for those who are Married Filing Jointly.</li>
+            </ul>
+
+            <h4>How do the income limits work?</h4>
+            <p>This deduction is designed for low- and middle-income earners and is not available to high earners.</p>
+            <ul>
+                <li><strong>For Single / Head of Household Filers:</strong> The deduction is available if your total income is <strong>under $150,000</strong>.</li>
+                <li><strong>For Married Filing Jointly:</strong> The deduction is available if your total income is <strong>under $300,000</strong>.</li>
+            </ul>
+            <p>If your income is above these thresholds, you cannot claim the deduction. Our calculator handles this check for you automatically.</p>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>&copy; 2025 quarterlytax.app | A TaxBuddy Tool</p>
+        <p style="margin-top: 10px;">This calculator provides estimates only. For personalized advice, consult a tax professional.</p>
+    </footer>
+
+    <script>
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function calculateDeduction() {
+            const totalIncome = parseFloat(document.getElementById('totalIncome').value) || 0;
+            const overtimePay = parseFloat(document.getElementById('overtimePay').value) || 0;
+            const filingStatus = document.querySelector('input[name="filingStatus"]:checked').value;
+
+            if (totalIncome === 0 || overtimePay === 0) {
+                alert("Please enter both your total income and your overtime pay.");
+                return;
+            }
+
+            const incomeLimit = (filingStatus === 'married') ? 300000 : 150000;
+            const maxDeduction = (filingStatus === 'married') ? 25000 : 12500;
+
+            let deductibleAmount = 0;
+            let explanation = '';
+            
+            // The deductible portion is the "half" of time-and-a-half, which is 1/3 of the total overtime pay.
+            const deductiblePortion = overtimePay / 3;
+
+            if (totalIncome > incomeLimit) {
+                deductibleAmount = 0;
+                explanation = `Because your total annual income of <strong>${formatCurrency(totalIncome)}</strong> is above the <strong>${formatCurrency(incomeLimit)}</strong> limit for your filing status, you do not qualify for the overtime pay deduction.`;
+            } else {
+                deductibleAmount = Math.min(deductiblePortion, maxDeduction);
+                explanation = `Based on your overtime pay, the deductible "half" portion is <strong>${formatCurrency(deductiblePortion)}</strong>. After applying the annual limit, your total deduction is <strong>${formatCurrency(deductibleAmount)}</strong>.`;
+            }
+            
+            const estimatedSavings = deductibleAmount * 0.22; // Using a blended 22% rate for illustration
+            explanation += `<br><br>This deduction could save you an estimated <strong>${formatCurrency(estimatedSavings)}</strong> on your income taxes!`;
+
+            document.getElementById('resultValue').textContent = formatCurrency(deductibleAmount);
+            document.getElementById('resultExplanation').innerHTML = explanation;
+            
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.classList.add('show');
+            
+            const nextStepLink = document.getElementById('nextStepLink');
+            nextStepLink.style.display = 'inline-block';
+
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    </script>
+</body>
+</html>
