@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaxBuddy - Simple Quarterly Tax Calculator for Freelancers</title>
+    <title>Free Quarterly Tax Calculator for 2025 | For Freelancers & 1099</title>
+    <meta name="description" content="The simplest, free quarterly tax calculator for freelancers, gig workers, and 1099 contractors. Updated for 2025 tax laws, including new deductions.">
     <style>
         * {
             margin: 0;
@@ -476,6 +477,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            margin-top: 10px;
         }
 
         .calculate-btn::before {
@@ -705,6 +707,34 @@
             text-align: center;
         }
 
+        /* New Content Block Styles */
+        .content-block {
+            text-align: left;
+            padding: 30px 40px;
+        }
+        .content-block .welcome-title {
+            text-align: center;
+        }
+        .content-block h4 {
+            font-weight: 700;
+            color: var(--dark);
+            margin-top: 25px;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--light-gray);
+            padding-bottom: 5px;
+        }
+        .content-block ul {
+            list-style-position: outside;
+            padding-left: 20px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        .content-block ul li {
+            margin-bottom: 10px;
+            padding-left: 5px;
+        }
+
         /* Tips Carousel - Enhanced Visual Design */
         .tips-carousel {
             background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
@@ -923,10 +953,8 @@
                 padding: 0 15px;
             }
 
-            .card, .result-card, .info-box {
+            .card, .result-card, .info-box, .content-block {
                 padding: 20px;
-                margin-left: 0;
-                margin-right: 0;
             }
 
             .quarters-grid {
@@ -1326,6 +1354,45 @@
             </div>
         </div>
 
+        <div class="welcome-card content-block" style="display: block; margin-top: 40px;">
+            <h2 class="welcome-title">What the 2025 "One Big Beautiful Bill" Means for You</h2>
+            <p>You've probably heard about the big tax changes that happened in 2025. The "One Big Beautiful Bill Act" made many of the 2017 tax cuts permanent and added some major new benefits, especially for freelancers, gig workers, and older Americans.</p>
+            <p>Here's the bottom line on the changes that matter most:</p>
+            <ul>
+                <li><strong>Lower Tax Rates Are Here to Stay:</strong> The seven tax brackets (10%, 12%, 22%, etc.) are now permanent, so you can plan on them for the future.</li>
+                <li><strong>A Bigger Standard Deduction:</strong> The standard deduction got a nice boost. For 2025, it's <strong>$15,750 for Single filers</strong> and <strong>$31,500 for Married couples filing jointly</strong>.</li>
+                <li><strong>New "Bonus" Deduction for Seniors:</strong> If you're 65 or older, you can now get an extra <strong>$6,000 "bonus"</strong> added to your standard deduction ($12,000 for a married couple if both are 65+), subject to income limits.</li>
+                <li><strong>More Help for Parents:</strong> The Child Tax Credit was increased to <strong>$2,200 per qualifying child</strong> under age 17.</li>
+                <li><strong>The QBI Deduction is Safe:</strong> The 20% Qualified Business Income (QBI) deduction—one of the best deductions for self-employed people—is now permanent.</li>
+            </ul>
+            <p>This calculator has been fully updated to include all of these new 2025 rules, so the numbers you see are based on the very latest information.</p>
+        </div>
+
+        <div class="welcome-card content-block" style="display: block;">
+            <h2 class="welcome-title">Frequently Asked Questions (FAQ)</h2>
+            
+            <h4>1. What exactly *are* quarterly taxes?</h4>
+            <p>Think of it this way: when you have a W-2 job, your employer withholds taxes from every paycheck. When you're self-employed, you are your own payroll department. The IRS requires you to send them those taxes throughout the year in four "estimated" payments instead of all at once in April. It's just the government's way of ensuring a steady flow of tax revenue.</p>
+
+            <h4>2. Do I *really* have to pay them?</h4>
+            <p>The simple rule of thumb is this: if you expect to owe <strong>at least $1,000 in tax</strong> for the year, then yes, you need to pay estimated quarterly taxes. This applies to most full-time freelancers and even many people with a side hustle.</p>
+            
+            <h4>3. How much should I set aside from each payment?</h4>
+            <p>A safe bet is to set aside <strong>25-30% of every single payment</strong> you receive. Put it into a separate savings account and don't touch it. This percentage is a good estimate because it covers both your income tax and the self-employment tax (for Social Security and Medicare).</p>
+
+            <h4>4. When are the 2025 quarterly tax deadlines?</h4>
+            <p>Mark these dates in your calendar! Missing them can lead to penalties.</p>
+            <ul>
+                <li><strong>Q1 (Jan 1 - Mar 31):</strong> April 15, 2025</li>
+                <li><strong>Q2 (Apr 1 - May 31):</strong> June 16, 2025</li>
+                <li><strong>Q3 (Jun 1 - Aug 31):</strong> September 15, 2025</li>
+                <li><strong>Q4 (Sep 1 - Dec 31):</strong> January 15, 2026</li>
+            </ul>
+
+            <h4>5. How do I actually pay the IRS?</h4>
+            <p>It's easier than you think. The best way is to pay for free directly from your bank account using <strong>IRS Direct Pay</strong> on their website. You don't even have to create an account. You can also use a credit/debit card (for a fee) or mail a check with a Form 1040-ES voucher, but Direct Pay is the simplest option.</p>
+        </div>
+
         <div class="tips-carousel">
             <div class="tips-header">
                 <span class="card-icon">💡</span>
@@ -1540,10 +1607,8 @@
             }
             standardDeduction += bonusDeduction;
 
-            // OBBB Deductions (Tips, OT, Car Interest)
             const totalOBBBDeductions = tipsIncome + overtimePay + carLoanInterest;
             
-            // QBI Deduction
             let preQBIDeductibleAmount = standardDeduction + totalOBBBDeductions + additionalDeductions;
             const qbiDeduction = Math.min(netBusinessIncome * 0.20, Math.max(0, (agi - preQBIDeductibleAmount) * 0.20));
 
@@ -1571,21 +1636,22 @@
             }
 
             // 7. Apply Credits and Finalize Tax
-            // Child Tax Credit
             let childTaxCredit = 0;
             const ctcPhaseoutStart = (filingStatus === 'married') ? 400000 : 200000;
-            if (agi < ctcPhaseoutStart) {
-                childTaxCredit = numChildren * 2200;
-            } else {
-                const excessAgi = Math.ceil((agi - ctcPhaseoutStart) / 1000) * 1000;
-                const reduction = (excessAgi / 1000) * 50;
-                childTaxCredit = Math.max(0, (numChildren * 2200) - reduction);
+            if (agi < ctcPhaseoutStart + 40000) { // Phaseout range is $40k
+                let maxCredit = numChildren * 2200;
+                if (agi > ctcPhaseoutStart) {
+                    const excessAgi = Math.ceil((agi - ctcPhaseoutStart) / 1000) * 1000;
+                    const reduction = (excessAgi / 1000) * 50;
+                    childTaxCredit = Math.max(0, maxCredit - reduction);
+                } else {
+                    childTaxCredit = maxCredit;
+                }
             }
 
             const totalTax = Math.max(0, selfEmploymentTax + incomeTax - childTaxCredit);
             let estimatedTaxDue = Math.max(0, totalTax - w2Withheld);
             
-            // Safe Harbor (Pro Mode)
             if (currentMode === 'pro' && priorYearTax > 0) {
                 const safeHarborAmount = agi > 150000 ? priorYearTax * 1.1 : priorYearTax;
                 if (safeHarborAmount < totalTax) {
@@ -1635,9 +1701,9 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             setMode('simple');
-            updateTipDisplay(); // To show the first tip and dots
+            updateTipDisplay(); 
             
-            document.querySelectorAll('.input-field').forEach(input => {
+            document.querySelectorAll('input').forEach(input => {
                 input.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
                         calculateTaxes();
