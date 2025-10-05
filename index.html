@@ -734,6 +734,41 @@
             margin-bottom: 10px;
             padding-left: 5px;
         }
+        
+        /* New Tool Grid Styles */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            text-align: left;
+        }
+        .tool-card {
+            display: block;
+            background: #f8fafc;
+            border: 1px solid var(--light-gray);
+            border-radius: 12px;
+            padding: 25px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            border-color: var(--primary);
+        }
+        .tool-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        .tool-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .tool-description {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
 
         /* Tips Carousel - Enhanced Visual Design */
         .tips-carousel {
@@ -1166,6 +1201,7 @@
                                 <span class="input-prefix">$</span>
                                 <input type="number" id="tipsIncome" class="input-field" placeholder="0" min="0" max="25000">
                             </div>
+                            <p style="text-align: right; margin-top: 5px; font-size: 0.9rem;"><a href="/tip-calculator.html" style="color: var(--primary); font-weight: 600;">Use our standalone Tip Deduction Calculator &rarr;</a></p>
                         </div>
 
                         <div class="input-group">
@@ -1353,8 +1389,21 @@
                 </div>
             </div>
         </div>
+        
+        <div class="welcome-card content-block" style="display: block; text-align: center;">
+            <h2 class="welcome-title">Explore Our Other Free Tax Tools</h2>
+            <p style="color: var(--gray); max-width: 600px; margin: 0 auto 30px;">Each calculator is designed to answer a specific question about the new 2025 tax laws.</p>
+            
+            <div class="tool-grid">
+                <a href="/tip-calculator.html" class="tool-card">
+                    <div class="tool-icon">💰</div>
+                    <h3 class="tool-title">Tip Deduction Calculator</h3>
+                    <p class="tool-description">Find out exactly how much of your tip income is deductible under the new 2025 rules.</p>
+                </a>
+            </div>
+        </div>
 
-        <div class="welcome-card content-block" style="display: block; margin-top: 40px;">
+        <div class="welcome-card content-block" style="display: block;">
             <h2 class="welcome-title">What the 2025 "One Big Beautiful Bill" Means for You</h2>
             <p>You've probably heard about the big tax changes that happened in 2025. The "One Big Beautiful Bill Act" made many of the 2017 tax cuts permanent and added some major new benefits, especially for freelancers, gig workers, and older Americans.</p>
             <p>Here's the bottom line on the changes that matter most:</p>
